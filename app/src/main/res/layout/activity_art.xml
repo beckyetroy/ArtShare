@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.wit.artshare.activities.ArtActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:elevation="0dip">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbarAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:theme="@style/MyToolbar"
+                app:titleTextAppearance="@style/Toolbar.TitleText">
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/appBarLayout"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@color/light_purple">
+
+                <EditText
+                    android:id="@+id/artTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_margin="8dp"
+                    android:autofillHints=""
+                    android:hint="@string/hint_movieTitle"
+                    android:inputType="text"
+                    android:maxLength="50"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/artImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="79dp"
+                    app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+                <Button
+                    android:id="@+id/chooseImage"
+                    android:layout_width="216dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:background="@color/lighter_navy"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="@string/button_addImage"
+                    android:textColor="@color/design_default_color_on_primary"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/movieYear"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_margin="8dp"
+                    android:autofillHints=""
+                    android:hint="@string/hint_movieYear"
+                    android:inputType="text"
+                    android:maxLength="4"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/movieDirector"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_margin="8dp"
+                    android:autofillHints=""
+                    android:hint="@string/hint_movieDirector"
+                    android:inputType="text"
+                    android:maxLength="100"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/movieDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_margin="8dp"
+                    android:autofillHints=""
+                    android:hint="@string/hint_movieDescription"
+                    android:inputType="textMultiLine"
+                    android:maxLength="250"
+                    android:maxLines="5"
+                    android:padding="8dp"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/movieLocation"
+                        android:layout_width="285dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:background="@color/lighter_navy"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:stateListAnimator="@null"
+                        android:text="@string/button_location"
+                        android:textColor="@color/design_default_color_on_primary"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/infoBtn"
+                        android:layout_width="53dp"
+                        android:layout_height="78dp"
+                        android:contentDescription="TODO"
+                        app:srcCompat="@android:drawable/ic_menu_info_details" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:fallbackLineSpacing="false"
+                        android:justificationMode="none"
+                        android:text="@string/rate_movie_text" />
+
+                    <RatingBar
+                        android:id="@+id/rBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:stepSize="0.5"
+                        android:theme="@style/Widget.AppCompat.RatingBar" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnAdd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:stateListAnimator="@null"
+                    android:text="@string/button_addMovie"
+                    android:background="@color/classic_navy"
+                    android:textColor="@color/gold"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/IMDBBtn"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:stateListAnimator="@null"
+                    android:text="@string/button_IMDB"
+                    android:background="@color/classic_navy"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

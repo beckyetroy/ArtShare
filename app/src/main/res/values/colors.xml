@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="classic_navy">#000066</color>
+    <color name="lighter_navy">#004d99</color>
+    <color name="gold">#ffd633</color>
+    <color name="light_purple">#e6ccff</color>
+    <color name="dark_grey">#333333</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="red">#FF0000</color>
+</resources>
