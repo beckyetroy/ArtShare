@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Disney Movies</string>
+    <string name="app_name">[ ArtShare ]</string>
     <string name="button_addMovie">Add Movie</string>
     <string name="hint_movieTitle">Movie Title</string>
     <string name="hint_movieYear">Year of Release</string>

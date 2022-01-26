@@ -17,11 +17,12 @@
     <style name="MyToolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:background">@color/classic_navy</item>
         <item name="android:textColorPrimary">@color/gold</item>
-        <item name ="android:fontFamily">@font/waltograph</item>
+        <item name ="android:fontFamily">@font/vacations</item>
     </style>
 
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">40sp</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Theme.Movie.NoActionBar">
