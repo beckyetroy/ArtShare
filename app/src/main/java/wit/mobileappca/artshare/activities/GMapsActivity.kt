@@ -36,7 +36,7 @@ class GMapsActivity : AppCompatActivity(), OnMapReadyCallback,
         Map = googleMap
         val loc = LatLng(location.lat, location.lng)
         val options = MarkerOptions()
-            .title("Movie")
+            .title("Art")
             .snippet("GPS : " + loc.toString())
             .draggable(true)
             .position(loc)

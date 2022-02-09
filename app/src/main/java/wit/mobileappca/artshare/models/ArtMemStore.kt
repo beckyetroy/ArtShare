@@ -11,31 +11,31 @@ internal fun getId(): Long {
 
 class ArtMemStore : ArtStore, AnkoLogger {
 
-    val movies = ArrayList<ArtModel>()
+    val arts = ArrayList<ArtModel>()
 
     override fun findAll(): List<ArtModel> {
-        return movies
+        return arts
     }
 
     override fun create(art: ArtModel) {
         art.id = getId()
-        movies.add(art)
+        arts.add(art)
         logAll()
     }
 
     override fun search(searchTerm: String): List<ArtModel> {
-        return movies.filter { movie -> movie.title.toLowerCase().contains(searchTerm.toLowerCase()) }
+        return arts.filter { art -> art.title.toLowerCase().contains(searchTerm.toLowerCase()) }
     }
 
     override fun update(art: ArtModel) {
-        var foundArt: ArtModel? = movies.find { m -> m.id == art.id }
+        var foundArt: ArtModel? = arts.find { m -> m.id == art.id }
         if (foundArt != null) {
             foundArt.title = art.title
-            foundArt.year = art.year
-            foundArt.director = art.director
+            foundArt.image = art.image
+            foundArt.type = art.type
             foundArt.description = art.description
             foundArt.image = art.image
-            foundArt.rating = art.rating
+            foundArt.date = art.date
             foundArt.lat = art.lat
             foundArt.lng = art.lng
             foundArt.zoom = art.zoom
@@ -44,10 +44,10 @@ class ArtMemStore : ArtStore, AnkoLogger {
     }
 
     override fun delete(art: ArtModel) {
-        movies.remove(art)
+        arts.remove(art)
     }
 
     fun logAll() {
-        movies.forEach { info("${it}") }
+        arts.forEach { info("${it}") }
     }
 }
