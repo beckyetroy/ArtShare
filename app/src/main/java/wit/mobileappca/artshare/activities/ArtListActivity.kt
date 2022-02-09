@@ -16,7 +16,7 @@ import org.wit.artshare.databinding.ActivityArtListBinding
 import org.wit.artshare.main.MainApp
 import org.wit.artshare.models.ArtModel
 
-class ArtListActivity : AppCompatActivity(), MovieListener {
+class ArtListActivity : AppCompatActivity(), ArtListener {
 
     lateinit var app: MainApp
     private lateinit var binding: ActivityArtListBinding
@@ -28,7 +28,6 @@ class ArtListActivity : AppCompatActivity(), MovieListener {
         app = application as MainApp
 
         //enable action bar and set title
-        toolbar.title = title
         setSupportActionBar(toolbar)
 
         //layout and populate for display
@@ -38,8 +37,7 @@ class ArtListActivity : AppCompatActivity(), MovieListener {
 
         registerRefreshCallback()
 
-
-        movie_search.setOnQueryTextListener(object: SearchView.OnQueryTextListener, androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        art_search.setOnQueryTextListener(object: SearchView.OnQueryTextListener, androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
@@ -48,9 +46,6 @@ class ArtListActivity : AppCompatActivity(), MovieListener {
                 if (newText != null) {
                     //show the arts found using the search function (see ArtAdapter)
                     showArts(app.arts.search(newText))
-                }
-                else {
-
                 }
                 return false
             }
@@ -71,9 +66,9 @@ class ArtListActivity : AppCompatActivity(), MovieListener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onMovieClick(art: ArtModel) {
+    override fun onArtClick(art: ArtModel) {
         //start ArtActivity with additional instructions
-        startActivityForResult(intentFor<ArtActivity>().putExtra("movie_edit", art), 0)
+        startActivityForResult(intentFor<ArtActivity>().putExtra("art_edit", art), 0)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

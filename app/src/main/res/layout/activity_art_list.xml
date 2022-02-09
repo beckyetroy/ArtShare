@@ -17,20 +17,30 @@
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:elevation="0dip"
-            app:theme="@style/MyToolbar">
+            app:theme="@style/ArtShareToolbar">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:titleTextAppearance="@style/Toolbar.TitleText" />
+                android:layout_height="76dp"
+                app:titleTextAppearance="@style/Toolbar.TitleText">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitStart"
+                    app:srcCompat="@mipmap/toolbar_logo_foreground"
+                    tools:ignore="ImageContrastCheck,ImageContrastCheck" />
+            </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.appcompat.widget.SearchView
-            android:id="@+id/movie_search"
+            android:id="@+id/art_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/lighter_navy"
+            android:background="@color/light_yellow"
             android:textCursorDrawable="@null"
             app:iconifiedByDefault="false"
             app:queryBackground="@null" />
@@ -39,6 +49,7 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/white"
             android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </LinearLayout>

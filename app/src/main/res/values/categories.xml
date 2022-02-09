@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="category_array">
+        <item>Acrylic</item>
+        <item>Chalk</item>
+        <item>Charcoal</item>
+        <item>Coloured Pencil</item>
+        <item>Digital</item>
+        <item>Gouache</item>
+        <item>Lino</item>
+        <item>Pastel</item>
+        <item>Pencil sketch</item>
+        <item>Spray Paint</item>
+        <item>Watercolour</item>
+        <item>Other</item>
+    </string-array>
+</resources>

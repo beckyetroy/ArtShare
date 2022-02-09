@@ -6,20 +6,20 @@
         android:visible="false"
         android:id="@+id/item_email"
         android:icon="@android:drawable/ic_menu_send"
-        android:title="@string/menu_deleteMovie"
+        android:title="@string/menu_deleteArt"
         app:showAsAction="always"/>
 
     <item
         android:visible="false"
         android:id="@+id/item_delete"
         android:icon="@android:drawable/ic_menu_delete"
-        android:title="@string/menu_deleteMovie"
+        android:title="@string/menu_deleteArt"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/item_cancel"
         android:icon="@android:drawable/ic_menu_close_clear_cancel"
-        android:title="@string/menu_cancelMovie"
+        android:title="@string/menu_cancelArt"
         app:showAsAction="always"/>
 
 </menu>

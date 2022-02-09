@@ -14,12 +14,12 @@ import android.widget.Filter
 import android.widget.Filterable
 import kotlin.collections.ArrayList
 
-interface MovieListener {
-    fun onMovieClick(art: ArtModel)
+interface ArtListener {
+    fun onArtClick(art: ArtModel)
 }
 
 class ArtAdapter constructor(private var arts: List<ArtModel>,
-                             private val listener: MovieListener) : RecyclerView.Adapter<ArtAdapter.MainHolder>(), Filterable {
+                             private val listener: ArtListener) : RecyclerView.Adapter<ArtAdapter.MainHolder>(), Filterable {
 
     var artFilterList = ArrayList<ArtModel>()
 
@@ -34,7 +34,7 @@ class ArtAdapter constructor(private var arts: List<ArtModel>,
                     }
                 } else {
                     val resultList = ArrayList<ArtModel>()
-                    /*case sensitive - if movie title matches query searched add it to the
+                    /*case sensitive - if artwork title matches query searched add it to the
                      resultlist*/
                     for (row in arts) {
                         if (row.title.toLowerCase(Locale.ROOT)
@@ -66,21 +66,21 @@ class ArtAdapter constructor(private var arts: List<ArtModel>,
     }
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
-        val movie = arts[holder.adapterPosition]
-        holder.bind(movie, listener)
+        val art = arts[holder.adapterPosition]
+        holder.bind(art, listener)
     }
 
     override fun getItemCount(): Int = arts.size
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(art: ArtModel, listener : MovieListener) {
+        fun bind(art: ArtModel, listener : ArtListener) {
             //populates the art cards with title, description, and image
             itemView.artTitle.text = art.title
             itemView.description.text = art.description
             itemView.imageIcon.setImageBitmap(readImageFromPath(itemView.context, art.image))
-            //start method onMovieClick for that particular art
-            itemView.setOnClickListener { listener.onMovieClick(art) }
+            //start method onArtClick for that particular art
+            itemView.setOnClickListener { listener.onArtClick(art) }
         }
     }
 }

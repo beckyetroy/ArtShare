@@ -41,19 +41,19 @@ class ArtJSONStore : ArtStore, AnkoLogger {
     }
 
     override fun search(searchTerm: String): List<ArtModel> {
-        return arts.filter { movie -> movie.title.toLowerCase().contains(searchTerm.toLowerCase()) }
+        return arts.filter { art -> art.title.toLowerCase().contains(searchTerm.toLowerCase()) }
     }
 
     override fun update(art: ArtModel) {
-        val moviesList = findAll() as ArrayList<ArtModel>
-        var foundArt: ArtModel? = moviesList.find { m -> m.id == art.id }
+        val artsList = findAll() as ArrayList<ArtModel>
+        var foundArt: ArtModel? = artsList.find { m -> m.id == art.id }
         if (foundArt != null) {
             foundArt.title = art.title
-            foundArt.year = art.year
-            foundArt.director = art.director
+            foundArt.image = art.image
+            foundArt.type = art.type
             foundArt.description = art.description
             foundArt.image = art.image
-            foundArt.rating = art.rating
+            foundArt.date = art.date
             foundArt.lat = art.lat
             foundArt.lng = art.lng
             foundArt.zoom = art.zoom

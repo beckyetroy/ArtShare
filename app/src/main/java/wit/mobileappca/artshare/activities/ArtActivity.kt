@@ -6,11 +6,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.RatingBar
+import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.DatePicker
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.activity_art.*
-import kotlinx.android.synthetic.main.activity_art_list.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.intentFor
@@ -20,8 +24,11 @@ import org.wit.artshare.helpers.readImage
 import org.wit.artshare.helpers.readImageFromPath
 import org.wit.artshare.helpers.showImagePicker
 import org.wit.artshare.main.MainApp
-import org.wit.artshare.models.Location
 import org.wit.artshare.models.ArtModel
+import org.wit.artshare.models.Location
+import java.time.LocalDate
+import java.util.*
+import java.util.Calendar.getInstance
 
 
 class ArtActivity : AppCompatActivity(), AnkoLogger {
@@ -38,44 +45,64 @@ class ArtActivity : AppCompatActivity(), AnkoLogger {
         app = application as MainApp
 
         //enable action bar and set title
-        toolbarAdd.title = "Add Movie"
+        toolbarAdd.title = "Add Your Masterpiece"
         setSupportActionBar(toolbarAdd)
 
-        if (intent.hasExtra("movie_edit")) {
+        //set Pinterest button to invisible and date picker to not render by default
+        pinterestBtn.isInvisible = true
+        artDate.isGone = true
+
+        if (intent.hasExtra("art_edit")) {
             edit = true
-            art = intent.extras?.getParcelable<ArtModel>("movie_edit")!!
-            //set the title of the toolbar to the movie title
+            art = intent.extras?.getParcelable<ArtModel>("art_edit")!!
+            //set the title of the toolbar to the artwork title
             toolbarAdd.title = art.title
             //populate the fields
             artTitle.setText(art.title)
-            movieYear.setText(art.year.toString())
-            movieDirector.setText(art.director)
-            movieDescription.setText(art.description)
-            rBar.setOnRatingBarChangeListener(object : RatingBar.OnRatingBarChangeListener {
-                override fun onRatingChanged(p0: RatingBar?, p1: Float, p2: Boolean) {
-                    //if the rating is changed, update it in movie
-                    art.rating = findViewById<RatingBar>(R.id.rBar).rating
+            artDescription.setText(art.description)
+
+            for (i in arrayListOf(R.array.category_array)) {
+                if (artType.getItemAtPosition(i).toString() == art.type){
+                    artType.setSelection(i)
                 }
-            })
-            //populate the rating bar to previously set rating
-            findViewById<RatingBar>(R.id.rBar).setRating(art.rating)
-            //display image stored
-            artImage.setImageBitmap(readImageFromPath(this, art.image))
-            if (art.image != null) {
-                chooseImage.setText(R.string.change_movie_image)
             }
+
+            if (artDate.isVisible) {
+                artDate.updateDate(getDateYear(art.date),getDateMonth(art.date),getDateDay(art.date))
+            }
+
+            //display image stored and update button text
+            artImage.setImageBitmap(readImageFromPath(this, art.image))
+            chooseImage.setText(R.string.change_image)
+
             //update location button from 'add location' to 'change location'
-            movieLocation.setText(R.string.change_button_location)
-            //update 'add movie' text on button to 'save movie'
-            btnAdd.setText(R.string.save_movie)
-            //display the IMDB button
-            IMDBBtn.isVisible = true;
+            artLocation.setText(R.string.change_button_location)
+            //update 'add artwork' text on button to 'save artwork'
+            btnAdd.setText(R.string.save_art)
         }
 
-        movieLocation.setOnClickListener {
-            /*set default location (DisneyWorld, Orlando) which user can keep if they're
+        val category: Spinner = findViewById(R.id.artType)
+        // Create an ArrayAdapter using the artType array and a default spinner layout
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.category_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the category
+            category.adapter = adapter
+        }
+
+        /*Reveal the hidden datepicker when user selects to use it*/
+        dateOption.setOnCheckedChangeListener{ _, isChecked ->
+            artDate.isVisible = isChecked
+        }
+
+        artLocation.setOnClickListener {
+            /*set default location (Florence, Italy) which user can keep if they're
             not interested in this feature*/
-            val location = Location(28.385233, -81.563873, -20f)
+            val location = Location(43.769562, 11.255814, -20f)
             if (art.zoom != 0f) {
                 location.lat = art.lat
                 location.lng = art.lng
@@ -96,33 +123,42 @@ class ArtActivity : AppCompatActivity(), AnkoLogger {
         btnAdd.setOnClickListener() {
             //parse the fields and assign them to their relevant values
             art.title = artTitle.text.toString()
-            var year = movieYear.text.toString().toInt()
-            art.director = movieDirector.text.toString()
-            art.description = movieDescription.text.toString()
-            art.rating = findViewById<RatingBar>(R.id.rBar).rating
-            art.year = year
+            art.description = artDescription.text.toString()
+            art.type = artType.selectedItem.toString()
+            if (artDate.isVisible) {
+                val datePicker = findViewById<View>(R.id.artDate) as DatePicker
+                val day = datePicker.dayOfMonth
+                val month = datePicker.month + 1
+                val year = datePicker.year
+                art.date = getDate(year,month,day)
+            }
+
             //validation
             if (art.title.isEmpty()) {
                 //title cannot be null - display error message
-                toast(R.string.enter_movie_title)
+                toast(R.string.enter_art_title)
             }
-            //year must be between 1937 and 2021 (any other is impossible for a Disney movie)
-            if (year < 1937 || year > 2021) {
-                toast(R.string.enter_movie_year)
+            if (art.type.isEmpty()) {
+                //type cannot be null - display error message
+                toast(R.string.enter_art_type)
+            }
+            if (art.image.isEmpty()) {
+                //image cannot be null - display error message
+                toast(R.string.enter_art)
             }
             else {
                 if (edit) {
                     //update the stored values
                     app.arts.update(art.copy())
                 } else {
-                    //create the movie
+                    //create the art piece
                     app.arts.create(art.copy())
                 }
                 info("Add Button Pressed: $artTitle")
                 setResult(AppCompatActivity.RESULT_OK)
                 //finish the activity
                 finish()
-                toast("Movie saved")
+                toast("Artwork saved")
             }
         }
 
@@ -131,23 +167,54 @@ class ArtActivity : AppCompatActivity(), AnkoLogger {
             showImagePicker(this, imgRequest)
         }
 
-        IMDBBtn.setOnClickListener {
-            val imdb = Intent(
-                //Sends the User to the IMDB Web page
+        pinterestBtn.setOnClickListener {
+            val pinterest = Intent(
+                //Sends the User to Pinterest to compare similarly titled works
                 Intent.ACTION_VIEW,
-                Uri.parse("https://www.imdb.com/find?q=" + art.title)
+                Uri.parse("https://www.pinterest.ie/search/pins/?q=" + art.title)
             )
             //starts the activity
-            startActivity(imdb)
+            startActivity(pinterest)
         }
+    }
+
+    /*Creates extension function so getdate() returns date object given year month and day*/
+    fun getDate(year: Int, month: Int, day: Int): Date {
+        var cal = getInstance()
+        cal[Calendar.YEAR] = year
+        cal[Calendar.MONTH] = month
+        cal[Calendar.DAY_OF_MONTH] = day
+        return cal.time
+    }
+
+    /*Creates extension functions to return year, month, and day given date object*/
+    fun getDateYear(date: Date): Int {
+        var cal = getInstance()
+        cal.time = date
+        var year = cal[Calendar.YEAR]
+        return year
+    }
+
+    fun getDateMonth(date: Date): Int {
+        var cal = getInstance()
+        cal.time = date
+        var month = cal[Calendar.MONTH]
+        return month
+    }
+
+    fun getDateDay(date: Date): Int {
+        var cal = getInstance()
+        cal.time = date
+        var day = cal[Calendar.DAY_OF_MONTH]
+        return day
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         //display menu
         menuInflater.inflate(R.menu.menu_art, menu)
-        //if the movie is in edit mode, display the delete and email buttons
-        if (edit && menu != null) menu.getItem(0).setVisible(true)
-        if (edit && menu != null) menu.getItem(1).setVisible(true)
+        //if the art is in edit mode, display the delete and email buttons
+        if (edit && menu != null) menu.getItem(0).isVisible = true
+        if (edit && menu != null) menu.getItem(1).isVisible = true
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -155,13 +222,13 @@ class ArtActivity : AppCompatActivity(), AnkoLogger {
         when (item?.itemId) {
             R.id.item_email -> {
                 val email = Intent(Intent.ACTION_SEND)
-                //form email containing movie details
+                //form email containing artwork details
                 email.putExtra(Intent.EXTRA_EMAIL, arrayOf("")) // recipients - will leave blank for users to complete
-                email.putExtra(Intent.EXTRA_SUBJECT, "Check out this Disney Movie!")
-                email.putExtra(Intent.EXTRA_TEXT, "Have a look at this movie: ${art.title}" +
-                        if (art.year != null) {"\n Released in: ${art.year}"} else {} +
-                        if (art.director != null) {"\n Directed by: ${art.director}"} else {} +
-                        "\n \n I rated it " + art.rating + "/5.0 stars!")
+                email.putExtra(Intent.EXTRA_SUBJECT, "Check out this art I made!")
+                email.putExtra(Intent.EXTRA_TEXT, "Have a look at this artwork: ${art.title}" +
+                        if (art.description != null) {"\n ${art.description}"} else {} +
+                        "\n Made with: ${art.type}" + if (art.date != null) {"on ${art.date}."} else {"."})
+                email.putExtra(Intent.EXTRA_STREAM, art.image)
 
                 //need this to prompts email client only
                 email.type = "message/rfc822"
@@ -170,7 +237,7 @@ class ArtActivity : AppCompatActivity(), AnkoLogger {
             }
             R.id.item_delete -> {
                 val builder = AlertDialog.Builder(this@ArtActivity)
-                builder.setMessage(("Are you sure you want to delete this movie?"))
+                builder.setMessage(("Are you sure you want to delete this artwork?"))
                     .setCancelable(false)
                     .setPositiveButton("Yes") { dialog, id ->
                         // Delete item
@@ -198,11 +265,11 @@ class ArtActivity : AppCompatActivity(), AnkoLogger {
         when (requestCode) {
             imgRequest -> {
                 if (data != null) {
-                    //parse image bitmap and set that as movie image attribute
+                    //parse image bitmap and set that as art image attribute
                     art.image = data.getData().toString()
                     artImage.setImageBitmap(readImage(this, resultCode, data))
                     //Change text from add image to change image, as image has been added
-                    chooseImage.setText(R.string.change_movie_image)
+                    chooseImage.setText(R.string.change_image)
                 }
             }
             locationRequest -> {
