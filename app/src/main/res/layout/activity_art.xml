@@ -79,7 +79,7 @@
                     android:padding="10dp">
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/selectType"
                         android:layout_width="99dp"
                         android:layout_height="48dp"
                         android:layout_weight="1"
@@ -107,19 +107,27 @@
                     android:padding="8dp"
                     android:textSize="14sp" />
 
-                <Switch
-                    android:id="@+id/dateOption"
-                    android:layout_width="203dp"
+                <LinearLayout
+                    android:layout_width="373dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/switch_date"
-                    android:textColor="@color/grey"
-                    android:padding="20dp"/>
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
-                <DatePicker
-                    android:id="@+id/artDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:datePickerMode="spinner"/>
+                    <TextView
+                        android:id="@+id/dateTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/date_title" />
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="238dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Now" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -172,7 +180,7 @@
                     android:stateListAnimator="@null"
                     android:text="@string/button_pinterest"
                     android:textColor="@color/white"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
             </LinearLayout>
         </ScrollView>

@@ -1,7 +1,7 @@
 package org.wit.artshare.helpers
 
 import android.content.Context
-import android.util.Log
+import timber.log.Timber.e
 import java.io.*
 
 fun write(context: Context, fileName: String, data: String) {
@@ -10,7 +10,7 @@ fun write(context: Context, fileName: String, data: String) {
         outputStreamWriter.write(data)
         outputStreamWriter.close()
     } catch (e: Exception) {
-        Log.e("Error: ", "Cannot read file: " + e.toString());
+        e("Cannot read file: %s", e.toString());
     }
 }
 
@@ -24,7 +24,7 @@ fun read(context: Context, fileName: String): String {
             val partialStr = StringBuilder()
             var done = false
             while (!done) {
-                var line = bufferedReader.readLine()
+                val line = bufferedReader.readLine()
                 done = (line == null);
                 if (line != null) partialStr.append(line);
             }
@@ -32,9 +32,9 @@ fun read(context: Context, fileName: String): String {
             str = partialStr.toString()
         }
     } catch (e: FileNotFoundException) {
-        Log.e("Error: ", "File not found: " + e.toString());
+        e("file not found: %s", e.toString());
     } catch (e: IOException) {
-        Log.e("Error: ", "Cannot read file: " + e.toString());
+        e("cannot read file: %s", e.toString());
     }
     return str
 }

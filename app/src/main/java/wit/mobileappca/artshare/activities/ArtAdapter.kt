@@ -77,7 +77,7 @@ class ArtAdapter constructor(private var arts: List<ArtModel>,
         fun bind(art: ArtModel, listener : ArtListener) {
             //populates the art cards with title, description, and image
             itemView.artTitle.text = art.title
-            itemView.description.text = art.description
+            itemView.artType.text = art.type
             itemView.imageIcon.setImageBitmap(readImageFromPath(itemView.context, art.image))
             //start method onArtClick for that particular art
             itemView.setOnClickListener { listener.onArtClick(art) }

@@ -2,6 +2,7 @@ package org.wit.artshare.activities
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -26,7 +27,6 @@ import org.wit.artshare.helpers.showImagePicker
 import org.wit.artshare.main.MainApp
 import org.wit.artshare.models.ArtModel
 import org.wit.artshare.models.Location
-import java.time.LocalDate
 import java.util.*
 import java.util.Calendar.getInstance
 
@@ -48,38 +48,10 @@ class ArtActivity : AppCompatActivity(), AnkoLogger {
         toolbarAdd.title = "Add Your Masterpiece"
         setSupportActionBar(toolbarAdd)
 
-        //set Pinterest button to invisible and date picker to not render by default
+        //set Pinterest button to invisible and date to not render by default
         pinterestBtn.isInvisible = true
-        artDate.isGone = true
-
-        if (intent.hasExtra("art_edit")) {
-            edit = true
-            art = intent.extras?.getParcelable<ArtModel>("art_edit")!!
-            //set the title of the toolbar to the artwork title
-            toolbarAdd.title = art.title
-            //populate the fields
-            artTitle.setText(art.title)
-            artDescription.setText(art.description)
-
-            for (i in arrayListOf(R.array.category_array)) {
-                if (artType.getItemAtPosition(i).toString() == art.type){
-                    artType.setSelection(i)
-                }
-            }
-
-            if (artDate.isVisible) {
-                artDate.updateDate(getDateYear(art.date),getDateMonth(art.date),getDateDay(art.date))
-            }
-
-            //display image stored and update button text
-            artImage.setImageBitmap(readImageFromPath(this, art.image))
-            chooseImage.setText(R.string.change_image)
-
-            //update location button from 'add location' to 'change location'
-            artLocation.setText(R.string.change_button_location)
-            //update 'add artwork' text on button to 'save artwork'
-            btnAdd.setText(R.string.save_art)
-        }
+        date.isGone = true
+        dateTitle.isGone = true
 
         val category: Spinner = findViewById(R.id.artType)
         // Create an ArrayAdapter using the artType array and a default spinner layout
@@ -94,9 +66,36 @@ class ArtActivity : AppCompatActivity(), AnkoLogger {
             category.adapter = adapter
         }
 
-        /*Reveal the hidden datepicker when user selects to use it*/
-        dateOption.setOnCheckedChangeListener{ _, isChecked ->
-            artDate.isVisible = isChecked
+        if (intent.hasExtra("art_edit")) {
+            edit = true
+            art = intent.extras?.getParcelable<ArtModel>("art_edit")!!
+            //set the title of the toolbar to the artwork title
+            toolbarAdd.title = art.title
+            //populate the fields
+            artTitle.setText(art.title)
+            artDescription.setText(art.description)
+
+            var res: Resources = resources
+            var types = res.getStringArray(R.array.category_array)
+
+            var index = types.indexOf(art.type)
+            artType.setSelection(index)
+
+            //show the date and date title with value
+            dateTitle.isGone = false
+            date.isGone = false
+            date.setText(art.date.toString())
+
+            //display image stored and update button text
+            artImage.setImageBitmap(readImageFromPath(artImage.context, art.image))
+            chooseImage.setText(R.string.change_image)
+
+            //update location button from 'add location' to 'change location'
+            artLocation.setText(R.string.change_button_location)
+            //update 'add artwork' text on button to 'save artwork'
+            btnAdd.setText(R.string.save_art)
+            //display the Pinterest Button
+            pinterestBtn.isInvisible = false
         }
 
         artLocation.setOnClickListener {
@@ -125,13 +124,7 @@ class ArtActivity : AppCompatActivity(), AnkoLogger {
             art.title = artTitle.text.toString()
             art.description = artDescription.text.toString()
             art.type = artType.selectedItem.toString()
-            if (artDate.isVisible) {
-                val datePicker = findViewById<View>(R.id.artDate) as DatePicker
-                val day = datePicker.dayOfMonth
-                val month = datePicker.month + 1
-                val year = datePicker.year
-                art.date = getDate(year,month,day)
-            }
+            art.date = getInstance().time
 
             //validation
             if (art.title.isEmpty()) {
@@ -171,42 +164,12 @@ class ArtActivity : AppCompatActivity(), AnkoLogger {
             val pinterest = Intent(
                 //Sends the User to Pinterest to compare similarly titled works
                 Intent.ACTION_VIEW,
-                Uri.parse("https://www.pinterest.ie/search/pins/?q=" + art.title)
+                Uri.parse("https://www.pinterest.ie/search/pins/?q=" + art.title + "%20" +
+                        art.type)
             )
             //starts the activity
             startActivity(pinterest)
         }
-    }
-
-    /*Creates extension function so getdate() returns date object given year month and day*/
-    fun getDate(year: Int, month: Int, day: Int): Date {
-        var cal = getInstance()
-        cal[Calendar.YEAR] = year
-        cal[Calendar.MONTH] = month
-        cal[Calendar.DAY_OF_MONTH] = day
-        return cal.time
-    }
-
-    /*Creates extension functions to return year, month, and day given date object*/
-    fun getDateYear(date: Date): Int {
-        var cal = getInstance()
-        cal.time = date
-        var year = cal[Calendar.YEAR]
-        return year
-    }
-
-    fun getDateMonth(date: Date): Int {
-        var cal = getInstance()
-        cal.time = date
-        var month = cal[Calendar.MONTH]
-        return month
-    }
-
-    fun getDateDay(date: Date): Int {
-        var cal = getInstance()
-        cal.time = date
-        var day = cal[Calendar.DAY_OF_MONTH]
-        return day
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -223,12 +186,14 @@ class ArtActivity : AppCompatActivity(), AnkoLogger {
             R.id.item_email -> {
                 val email = Intent(Intent.ACTION_SEND)
                 //form email containing artwork details
-                email.putExtra(Intent.EXTRA_EMAIL, arrayOf("")) // recipients - will leave blank for users to complete
+                email.putExtra(Intent.EXTRA_EMAIL, arrayOf("")) // recipients - will leave blank for
+                // users to complete
                 email.putExtra(Intent.EXTRA_SUBJECT, "Check out this art I made!")
-                email.putExtra(Intent.EXTRA_TEXT, "Have a look at this artwork: ${art.title}" +
-                        if (art.description != null) {"\n ${art.description}"} else {} +
-                        "\n Made with: ${art.type}" + if (art.date != null) {"on ${art.date}."} else {"."})
-                email.putExtra(Intent.EXTRA_STREAM, art.image)
+                email.putExtra(Intent.EXTRA_TEXT, "Have a look at this artwork: ${art.title}"
+                        + if (art.description != null) {"\n ${art.description}"} else {} +
+                        "\n Art Type: ${art.type}" + if (art.date != null) {". Made at ${art.date}."}
+                        else {"."})
+                email.putExtra(Intent.EXTRA_STREAM, Uri.parse(art.image))
 
                 //need this to prompts email client only
                 email.type = "message/rfc822"
@@ -266,7 +231,7 @@ class ArtActivity : AppCompatActivity(), AnkoLogger {
             imgRequest -> {
                 if (data != null) {
                     //parse image bitmap and set that as art image attribute
-                    art.image = data.getData().toString()
+                    art.image = data.data.toString()
                     artImage.setImageBitmap(readImage(this, resultCode, data))
                     //Change text from add image to change image, as image has been added
                     chooseImage.setText(R.string.change_image)
@@ -274,7 +239,7 @@ class ArtActivity : AppCompatActivity(), AnkoLogger {
             }
             locationRequest -> {
                 if (data != null) {
-                    //parse location of placemarker and make that the location with appropriate zoom
+                    //parse location of art and make that the location with appropriate zoom
                     val location = data.extras?.getParcelable<Location>("location")!!
                     art.lat = location.lat
                     art.lng = location.lng
