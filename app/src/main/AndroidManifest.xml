@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.wit.artshare" >
+    package="org.wit.artshare">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -8,27 +8,27 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
-        android:name="org.wit.artshare.main.MainApp"
-        android:usesCleartextTraffic="true"
+        android:name=".main.MainApp"
         android:allowBackup="true"
         android:icon="@mipmap/artshare_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/artshare_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Art" >
-
+        android:theme="@style/Theme.Art">
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="org.wit.artshare.activities.GMapsActivity"
+            android:name=".activities.GMapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name="org.wit.artshare.activities.ArtActivity" />
-        <activity android:name="org.wit.artshare.activities.ArtListActivity" >
+        <activity
+            android:name="wit.mobileappca.artshare.activities.Home"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

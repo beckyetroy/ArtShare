@@ -4,34 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.wit.artshare.activities.ArtActivity">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            app:elevation="0dip">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbarAdd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:theme="@style/ArtShareToolbar"
-                app:titleTextAppearance="@style/Toolbar.TitleText">
-            </androidx.appcompat.widget.Toolbar>
-        </com.google.android.material.appbar.AppBarLayout>
+    tools:context="wit.mobileappca.artshare.fragments.CreateFragment">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/appBarLayout"
             android:fillViewport="true">
 
             <LinearLayout
@@ -60,7 +37,7 @@
                     android:layout_height="79dp"
                     app:srcCompat="@android:drawable/ic_menu_gallery" />
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/chooseImage"
                     android:layout_width="216dp"
                     android:layout_height="wrap_content"
@@ -134,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/artLocation"
                         android:layout_width="285dp"
                         android:layout_height="wrap_content"
@@ -156,7 +133,7 @@
 
                 </LinearLayout>
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnAdd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -169,7 +146,7 @@
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/pinterestBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -184,5 +161,4 @@
 
             </LinearLayout>
         </ScrollView>
-    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

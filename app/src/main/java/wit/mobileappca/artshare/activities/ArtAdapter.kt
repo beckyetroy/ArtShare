@@ -1,18 +1,21 @@
 package org.wit.artshare.activities
 
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.card_art.view.*
-import kotlinx.android.synthetic.main.card_art.view.artTitle
-import org.wit.artshare.R
-import org.wit.artshare.helpers.readImageFromPath
-import org.wit.artshare.models.ArtModel
-import java.util.*
 import android.widget.Filter
 import android.widget.Filterable
-import kotlin.collections.ArrayList
+import androidx.core.content.ContextCompat.startActivity
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.card_art.view.*
+import org.wit.artshare.databinding.CardArtBinding
+import org.wit.artshare.helpers.readImageFromPath
+import org.wit.artshare.models.ArtModel
+import wit.mobileappca.artshare.fragments.CreateFragment
+import wit.mobileappca.artshare.fragments.ViewFragment
+import java.util.*
+
 
 interface ArtListener {
     fun onArtClick(art: ArtModel)
@@ -37,8 +40,8 @@ class ArtAdapter constructor(private var arts: List<ArtModel>,
                     /*case sensitive - if artwork title matches query searched add it to the
                      resultlist*/
                     for (row in arts) {
-                        if (row.title.toLowerCase(Locale.ROOT)
-                                        .contains(charSearch.toLowerCase(Locale.ROOT))
+                        if (row.title.lowercase(Locale.ROOT)
+                                        .contains(charSearch.lowercase(Locale.ROOT))
                         ) {
                             resultList.add(row)
                         }
@@ -62,7 +65,10 @@ class ArtAdapter constructor(private var arts: List<ArtModel>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         //Display arts as cards
-        return MainHolder(LayoutInflater.from(parent?.context).inflate(R.layout.card_art, parent, false))
+        val binding = CardArtBinding
+            .inflate(LayoutInflater.from(parent.context), parent, false)
+
+        return MainHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
@@ -72,7 +78,7 @@ class ArtAdapter constructor(private var arts: List<ArtModel>,
 
     override fun getItemCount(): Int = arts.size
 
-    class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MainHolder(val binding : CardArtBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(art: ArtModel, listener : ArtListener) {
             //populates the art cards with title, description, and image
