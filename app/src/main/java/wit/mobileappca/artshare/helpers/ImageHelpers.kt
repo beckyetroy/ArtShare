@@ -7,8 +7,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
+import androidx.fragment.app.Fragment
 import org.wit.artshare.R
 import java.io.IOException
+
 
 fun showImagePicker(parent: Activity, id: Int) {
     val intent = Intent()
@@ -38,8 +40,8 @@ fun readImageFromPath(context: Context, path : String) : Bitmap? {
     val uri = Uri.parse(path)
     if (uri != null) {
         try {
-            val parcelFileDescriptor = context.getContentResolver().openFileDescriptor(uri, "r")
-            val fileDescriptor = parcelFileDescriptor?.getFileDescriptor()
+            val parcelFileDescriptor = context.contentResolver.openFileDescriptor(uri, "r")
+            val fileDescriptor = parcelFileDescriptor?.fileDescriptor
             bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor)
             parcelFileDescriptor?.close()
         } catch (e: Exception) {

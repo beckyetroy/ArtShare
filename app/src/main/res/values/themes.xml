@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.Art" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/lighter_pink</item>
+    <style name="Theme.Art" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/purple</item>
         <item name="colorPrimaryVariant">@color/dark_purple</item>
         <item name="colorOnPrimary">@color/black</item>
 
@@ -12,21 +12,11 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
     </style>
 
-
-    <style name="ArtShareToolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:background">@color/purple</item>
-        <item name="android:textColorPrimary">@color/white</item>
-    </style>
-
-    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">20sp</item>
-    </style>
-
     <style name="Theme.Art.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="Theme.Movie.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="Theme.Movie.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.Art.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Art.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
