@@ -1,4 +1,4 @@
-package org.wit.artshare.helpers
+package wit.mobileappca.artshare.helpers
 
 import android.app.Activity
 import android.content.Context
@@ -7,8 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
-import androidx.fragment.app.Fragment
-import org.wit.artshare.R
+import wit.mobileappca.artshare.R
 import java.io.IOException
 
 

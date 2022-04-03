@@ -1,4 +1,4 @@
-package org.wit.artshare
+package wit.mobileappca.artshare
 
 import org.junit.Test
 

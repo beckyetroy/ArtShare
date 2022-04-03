@@ -1,4 +1,4 @@
-package org.wit.artshare
+package wit.mobileappca.artshare
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("org.wit.artshare", appContext.packageName)
+        assertEquals("wit.mobileappca.artshare", appContext.packageName)
     }
 }

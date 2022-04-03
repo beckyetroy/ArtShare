@@ -1,4 +1,4 @@
-package org.wit.artshare.models
+package wit.mobileappca.artshare.models
 
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper

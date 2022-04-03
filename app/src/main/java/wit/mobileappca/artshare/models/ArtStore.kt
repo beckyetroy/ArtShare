@@ -1,4 +1,4 @@
-package org.wit.artshare.models
+package wit.mobileappca.artshare.models
 
 interface ArtStore {
     fun findAll(): List<ArtModel>

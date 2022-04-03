@@ -1,4 +1,4 @@
-package org.wit.artshare.helpers
+package wit.mobileappca.artshare.helpers
 
 import android.content.Context
 import timber.log.Timber.e

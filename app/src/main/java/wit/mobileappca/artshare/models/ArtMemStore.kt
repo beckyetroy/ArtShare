@@ -1,4 +1,4 @@
-package org.wit.artshare.models
+package wit.mobileappca.artshare.models
 
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info

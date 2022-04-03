@@ -1,4 +1,4 @@
-package wit.mobileappca.artshare.fragments
+package wit.mobileappca.artshare.ui.create
 
 import android.content.Intent
 import android.content.res.Resources
@@ -14,18 +14,21 @@ import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_create.*
-import kotlinx.android.synthetic.main.fragment_create.view.*
-import kotlinx.android.synthetic.main.fragment_view.*
 import org.jetbrains.anko.toast
-import org.wit.artshare.R
-import org.wit.artshare.activities.GMapsActivity
-import org.wit.artshare.databinding.FragmentCreateBinding
-import org.wit.artshare.helpers.readImageFromPath
-import org.wit.artshare.helpers.showImagePicker
-import org.wit.artshare.main.MainApp
-import org.wit.artshare.models.ArtModel
-import org.wit.artshare.models.Location
+import wit.mobileappca.artshare.R
+import wit.mobileappca.artshare.activities.GMapsActivity
+import wit.mobileappca.artshare.databinding.FragmentCreateBinding
+import wit.mobileappca.artshare.helpers.readImageFromPath
+import wit.mobileappca.artshare.helpers.showImagePicker
+import wit.mobileappca.artshare.main.MainApp
+import wit.mobileappca.artshare.models.ArtModel
+import wit.mobileappca.artshare.models.Location
+import wit.mobileappca.artshare.ui.list.ListFragment
+import wit.mobileappca.artshare.ui.list.ListViewModel
 import java.util.Calendar.getInstance
 
 
@@ -34,6 +37,7 @@ class CreateFragment : Fragment() {
     lateinit var app: MainApp
     private var _fragBinding: FragmentCreateBinding? = null
     private val fragBinding get() = _fragBinding!!
+    private lateinit var createViewModel: CreateViewModel
 
     var art = ArtModel()
     var edit = false
@@ -55,6 +59,13 @@ class CreateFragment : Fragment() {
         _fragBinding = FragmentCreateBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         activity?.title = getString(R.string.app_name)
+
+        createViewModel =
+            ViewModelProvider(this).get(CreateViewModel::class.java)
+        //val textView: TextView = root.findViewById(R.id.text_home)
+        createViewModel.observableStatus.observe(viewLifecycleOwner, Observer {
+                status -> status?.let { render(status) }
+        })
 
         //set Pinterest button to invisible and date to not render by default
         fragBinding.pinterestBtn.isInvisible = true
@@ -149,10 +160,10 @@ class CreateFragment : Fragment() {
             else {
                 if (edit) {
                     //update the stored values
-                    app.arts.update(art.copy())
+                    createViewModel.updateArt(art)
                 } else {
                     //create the art piece
-                    app.arts.create(art.copy())
+                    createViewModel.addArt(art)
                 }
                 Toast.makeText(context, R.string.save_success,Toast.LENGTH_LONG).show()
                 //go back to view fragment
@@ -166,10 +177,10 @@ class CreateFragment : Fragment() {
                     activity?.recreate()
                 }
                 else {
-                    val viewFragment = ViewFragment()
+                    val listFragment = ListFragment()
                     fragmentManager
                         ?.beginTransaction()
-                        ?.replace(R.id.nav_host_fragment, viewFragment)
+                        ?.replace(R.id.nav_host_fragment, listFragment)
                         ?.commit()
                 }
             }
@@ -195,6 +206,17 @@ class CreateFragment : Fragment() {
         }
 
         return root;
+    }
+
+    private fun render(status: Boolean) {
+        when (status) {
+            true -> {
+                view?.let {
+                    findNavController().popBackStack()
+                }
+            }
+            false -> Toast.makeText(context,getString(R.string.artError),Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -229,11 +251,11 @@ class CreateFragment : Fragment() {
                 builder?.setMessage(("Are you sure you want to delete this artwork?"))
                     ?.setCancelable(false)?.setPositiveButton("Yes") { dialog, id ->
                         // Delete item
-                        app.arts.delete(art)
-                        val viewFragment = ViewFragment()
+                        createViewModel.deleteArt(art)
+                        val listFragment = ListFragment()
                         fragmentManager
                             ?.beginTransaction()
-                            ?.add(R.id.nav_host_fragment, viewFragment)
+                            ?.add(R.id.nav_host_fragment, listFragment)
                             ?.commit()
                 }?.setNegativeButton("Cancel") { dialog, id ->
                     // Dismiss the dialog
@@ -265,5 +287,10 @@ class CreateFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        //TODO - Add total functionality here
+        //val listViewModel = ViewModelProvider(this).get(ListViewModel::class.java)
+        //listViewModel.observableArtsList.observe(viewLifecycleOwner, Observer {
+        //    totalArt = listViewModel.observableArtsList.value!!.sumOf { it.amount }
+        //})
     }
 }

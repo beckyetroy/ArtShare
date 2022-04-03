@@ -1,4 +1,4 @@
-package org.wit.artshare.activities
+package wit.mobileappca.artshare.activities
 
 import android.app.Activity
 import android.content.Intent
@@ -13,8 +13,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
-import org.wit.artshare.R
-import org.wit.artshare.models.Location
+import wit.mobileappca.artshare.R
+import wit.mobileappca.artshare.models.Location
 
 class GMapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMarkerDragListener,
