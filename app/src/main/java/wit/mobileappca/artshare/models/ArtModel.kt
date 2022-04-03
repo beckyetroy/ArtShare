@@ -1,8 +1,7 @@
-package org.wit.artshare.models
+package wit.mobileappca.artshare.models
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import java.time.LocalDate
 import java.util.*
 
 @Parcelize

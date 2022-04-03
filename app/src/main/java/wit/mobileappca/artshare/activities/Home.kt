@@ -6,20 +6,19 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.*
 import kotlinx.android.synthetic.main.fragment_create.*
-import org.wit.artshare.R
-import org.wit.artshare.databinding.HomeBinding
-import org.wit.artshare.helpers.readImage
-import org.wit.artshare.models.ArtModel
-import org.wit.artshare.models.Location
-import wit.mobileappca.artshare.fragments.CreateFragment
+import wit.mobileappca.artshare.R
+import wit.mobileappca.artshare.databinding.HomeBinding
+import wit.mobileappca.artshare.helpers.readImage
+import wit.mobileappca.artshare.models.Location
 
 class Home : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var homeBinding : HomeBinding
+    private lateinit var appBarConfiguration: AppBarConfiguration
     val imgRequest = 1
     val locationRequest = 2
 
@@ -32,15 +31,24 @@ class Home : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val navController = findNavController(R.id.nav_host_fragment)
-        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
+        val navHostFragment = supportFragmentManager.
+        findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+
+        appBarConfiguration = AppBarConfiguration(setOf(
+            R.id.createFragment, R.id.listFragment), drawerLayout)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
         val navView = homeBinding.navView
         navView.setupWithNavController(navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
-        return NavigationUI.navigateUp(navController, drawerLayout)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

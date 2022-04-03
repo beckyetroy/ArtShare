@@ -34,6 +34,6 @@
     <string name="change_button_location">Change Location</string>
     <string name="chooser_title">Choose an app to open the link.</string>
     <string name="link_error">Error opening with this application.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="artError">Error : Couldn\'t Create Artwork</string>
+    <string name="about_heading">About ArtShare</string>
 </resources>

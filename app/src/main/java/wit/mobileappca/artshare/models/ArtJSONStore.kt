@@ -1,13 +1,13 @@
-package org.wit.artshare.models
+package wit.mobileappca.artshare.models
 
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import org.jetbrains.anko.AnkoLogger
-import org.wit.artshare.helpers.exists
-import org.wit.artshare.helpers.read
-import org.wit.artshare.helpers.write
+import wit.mobileappca.artshare.helpers.exists
+import wit.mobileappca.artshare.helpers.read
+import wit.mobileappca.artshare.helpers.write
 import java.util.*
 
 val JSON_FILE = "arts.json"

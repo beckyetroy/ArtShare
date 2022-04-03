@@ -1,19 +1,14 @@
-package org.wit.artshare.activities
+package wit.mobileappca.artshare.adapters
 
-import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.card_art.view.*
-import org.wit.artshare.databinding.CardArtBinding
-import org.wit.artshare.helpers.readImageFromPath
-import org.wit.artshare.models.ArtModel
-import wit.mobileappca.artshare.fragments.CreateFragment
-import wit.mobileappca.artshare.fragments.ViewFragment
+import wit.mobileappca.artshare.databinding.CardArtBinding
+import wit.mobileappca.artshare.helpers.readImageFromPath
+import wit.mobileappca.artshare.models.ArtModel
 import java.util.*
 
 
@@ -22,7 +17,8 @@ interface ArtListener {
 }
 
 class ArtAdapter constructor(private var arts: List<ArtModel>,
-                             private val listener: ArtListener) : RecyclerView.Adapter<ArtAdapter.MainHolder>(), Filterable {
+                             private val listener: ArtListener
+) : RecyclerView.Adapter<ArtAdapter.MainHolder>(), Filterable {
 
     var artFilterList = ArrayList<ArtModel>()
 
@@ -82,11 +78,18 @@ class ArtAdapter constructor(private var arts: List<ArtModel>,
 
         fun bind(art: ArtModel, listener : ArtListener) {
             //populates the art cards with title, description, and image
-            itemView.artTitle.text = art.title
-            itemView.artType.text = art.type
-            itemView.imageIcon.setImageBitmap(readImageFromPath(itemView.context, art.image))
+            binding.art = art
+            binding.imageIcon.setImageBitmap(readImageFromPath(itemView.context, art.image))
+            binding.artTitle.text = art.title
+            binding.artType.text = art.type
             //start method onArtClick for that particular art
-            itemView.setOnClickListener { listener.onArtClick(art) }
+            binding.root.setOnClickListener { listener.onArtClick(art) }
+            binding.executePendingBindings()
+            //itemView.artTitle.text = art.title
+            //itemView.artType.text = art.type
+            //itemView.imageIcon.setImageBitmap(readImageFromPath(itemView.context, art.image))
+            //start method onArtClick for that particular art
+            //itemView.setOnClickListener { listener.onArtClick(art) }
         }
     }
 }

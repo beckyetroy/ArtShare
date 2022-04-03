@@ -3,26 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/viewFragment">
+    app:startDestination="@id/listFragment">
 
     <fragment
         android:id="@+id/createFragment"
-        android:name="wit.mobileappca.artshare.fragments.CreateFragment"
+        android:name="wit.mobileappca.artshare.ui.create.CreateFragment"
         android:label="@string/menu_createEdit"
         tools:layout="@layout/fragment_create" >
         <action
-            android:id="@+id/action_createFragment_to_viewFragment"
-            app:destination="@id/viewFragment"
+            android:id="@+id/action_createFragment_to_listFragment"
+            app:destination="@id/listFragment"
             app:enterAnim="@anim/nav_default_pop_enter_anim"
             app:exitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
-        android:id="@+id/viewFragment"
-        android:name="wit.mobileappca.artshare.fragments.ViewFragment"
+        android:id="@+id/listFragment"
+        android:name="wit.mobileappca.artshare.ui.list.ListFragment"
         android:label="@string/menu_view"
-        tools:layout="@layout/fragment_view" >
+        tools:layout="@layout/fragment_list" >
         <action
-            android:id="@+id/action_viewFragment_to_createFragment"
+            android:id="@+id/action_listFragment_to_createFragment"
             app:destination="@id/createFragment"
             app:enterAnim="@anim/nav_default_pop_enter_anim"
             app:exitAnim="@anim/nav_default_pop_exit_anim" />
