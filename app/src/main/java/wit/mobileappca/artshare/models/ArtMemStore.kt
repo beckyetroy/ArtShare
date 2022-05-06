@@ -1,7 +1,10 @@
 package wit.mobileappca.artshare.models
 
+import androidx.lifecycle.MutableLiveData
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
+import java.util.*
+import kotlin.collections.ArrayList
 
 var lastId = 0L
 
@@ -17,6 +20,18 @@ class ArtMemStore : ArtStore, AnkoLogger {
         return arts
     }
 
+    override fun findAll(artsList: MutableLiveData<List<ArtModel>>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun findAll(email: String, donationsList: MutableLiveData<List<ArtModel>>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun findById(email: String, id: String, art: MutableLiveData<ArtModel>) {
+        TODO("Not yet implemented")
+    }
+
     override fun create(art: ArtModel) {
         art.id = getId()
         arts.add(art)
@@ -24,10 +39,10 @@ class ArtMemStore : ArtStore, AnkoLogger {
     }
 
     override fun search(searchTerm: String): List<ArtModel> {
-        return arts.filter { art -> art.title.toLowerCase().contains(searchTerm.toLowerCase()) }
+        return arts.filter { art -> art.title.lowercase(Locale.getDefault()).contains(searchTerm.toLowerCase()) }
     }
 
-    override fun update(art: ArtModel) {
+    override fun update(email: String, art: ArtModel) {
         var foundArt: ArtModel? = arts.find { m -> m.id == art.id }
         if (foundArt != null) {
             foundArt.title = art.title
@@ -43,7 +58,7 @@ class ArtMemStore : ArtStore, AnkoLogger {
         }
     }
 
-    override fun delete(art: ArtModel) {
+    override fun delete(email: String, art: ArtModel) {
         arts.remove(art)
     }
 

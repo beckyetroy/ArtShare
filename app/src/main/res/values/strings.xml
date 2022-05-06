@@ -36,4 +36,19 @@
     <string name="link_error">Error opening with this application.</string>
     <string name="artError">Error : Couldn\'t Create Artwork</string>
     <string name="about_heading">About ArtShare</string>
+    <string name="artsNotFound">No Artwork Yet…\nUpload some now!</string>
+
+    <!-- Firebase Resources-->
+
+    <string name="login_title">Login now to get started!</string>
+    <string name="signed_out">Signed out.</string>
+    <string name="hint_email">Email Address</string>
+    <string name="hint_password">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="verify_email">Verify Email</string>
+    <string name="create_account">Create Account</string>
+    <string name="auth_failed">Authentication failed.</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="nav_header_user">Signed in as: beckyet19@gmail.com</string>
+    <string name="messageLoading"> Loading. Please Wait ...</string>
 </resources>

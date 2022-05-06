@@ -1,6 +1,7 @@
 package wit.mobileappca.artshare.models
 
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -34,6 +35,18 @@ class ArtJSONStore : ArtStore, AnkoLogger {
         return arts
     }
 
+    override fun findAll(artsList: MutableLiveData<List<ArtModel>>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun findAll(email: String, donationsList: MutableLiveData<List<ArtModel>>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun findById(email: String, id: String, art: MutableLiveData<ArtModel>) {
+        TODO("Not yet implemented")
+    }
+
     override fun create(art: ArtModel) {
         art.id = generateRandomId()
         arts.add(art)
@@ -44,7 +57,7 @@ class ArtJSONStore : ArtStore, AnkoLogger {
         return arts.filter { art -> art.title.toLowerCase().contains(searchTerm.toLowerCase()) }
     }
 
-    override fun update(art: ArtModel) {
+    override fun update(email: String, art: ArtModel) {
         val artsList = findAll() as ArrayList<ArtModel>
         var foundArt: ArtModel? = artsList.find { m -> m.id == art.id }
         if (foundArt != null) {
@@ -57,11 +70,12 @@ class ArtJSONStore : ArtStore, AnkoLogger {
             foundArt.lat = art.lat
             foundArt.lng = art.lng
             foundArt.zoom = art.zoom
+            foundArt.email = art.email
         }
         serialize()
     }
 
-    override fun delete(art: ArtModel) {
+    override fun delete(email: String, art: ArtModel) {
         arts.remove(art)
         serialize()
     }

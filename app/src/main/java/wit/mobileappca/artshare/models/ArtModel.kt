@@ -14,7 +14,8 @@ data class ArtModel(
     var date: Date = Calendar.getInstance().time,
     var lat: Double = 0.0,
     var lng: Double = 0.0,
-    var zoom: Float = 0f) : Parcelable
+    var zoom: Float = 0f,
+    var email: String = "beckyet19@gmail.com") : Parcelable
 
 //For the purposes of the default location marker separate from art, set when the GMapsActivity is called
 @Parcelize

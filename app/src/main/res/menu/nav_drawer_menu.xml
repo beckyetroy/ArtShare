@@ -22,4 +22,13 @@
                 android:title="@string/menu_sendArt" />
         </menu>
     </item>
+    <item android:title="Access Control">
+        <menu>
+            <item
+                android:id="@+id/signout"
+                android:icon="@drawable/ic_menu_signout"
+                android:onClick="signOut"
+                android:title="@string/sign_out" />
+        </menu>
+    </item>
 </menu>

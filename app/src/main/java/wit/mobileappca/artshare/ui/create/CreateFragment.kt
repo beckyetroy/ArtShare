@@ -14,6 +14,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -27,6 +28,7 @@ import wit.mobileappca.artshare.helpers.showImagePicker
 import wit.mobileappca.artshare.main.MainApp
 import wit.mobileappca.artshare.models.ArtModel
 import wit.mobileappca.artshare.models.Location
+import wit.mobileappca.artshare.ui.auth.LoggedInViewModel
 import wit.mobileappca.artshare.ui.list.ListFragment
 import wit.mobileappca.artshare.ui.list.ListViewModel
 import java.util.Calendar.getInstance
@@ -38,6 +40,7 @@ class CreateFragment : Fragment() {
     private var _fragBinding: FragmentCreateBinding? = null
     private val fragBinding get() = _fragBinding!!
     private lateinit var createViewModel: CreateViewModel
+    private val loggedInViewModel : LoggedInViewModel by activityViewModels()
 
     var art = ArtModel()
     var edit = false
@@ -143,6 +146,7 @@ class CreateFragment : Fragment() {
             art.description = artDescription.text.toString()
             art.type = artType.selectedItem.toString()
             art.date = getInstance().time
+            art.email = loggedInViewModel.liveFirebaseUser.value?.email!!
 
             //validation
             if (art.title.isEmpty()) {

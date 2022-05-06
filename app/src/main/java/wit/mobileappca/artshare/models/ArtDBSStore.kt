@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.ContentValues
 
 
-class ArtDBStore(context: Context, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int)
+abstract class ArtDBStore(context: Context, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int)
     : SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION), ArtStore
 {
 
@@ -120,7 +120,7 @@ class ArtDBStore(context: Context, name: String?, factory: SQLiteDatabase.Cursor
         return arts
     }
 
-    override fun update(art: ArtModel) {
+    override fun update(email: String, art: ArtModel) {
         val db = this.writableDatabase
         val values = ContentValues()
         values.put(COLUMN_TITLE, art.title)
@@ -135,7 +135,7 @@ class ArtDBStore(context: Context, name: String?, factory: SQLiteDatabase.Cursor
         db.close()
     }
 
-    override fun delete(art: ArtModel) {
+    override fun delete(email: String, art: ArtModel) {
         val query =
                 "SELECT * FROM $TABLE_ART WHERE $COLUMN_TITLE = \"$art.title\""
 
