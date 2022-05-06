@@ -16,7 +16,7 @@ interface ArtListener {
     fun onArtClick(art: ArtModel)
 }
 
-class ArtAdapter constructor(private var arts: List<ArtModel>,
+class ArtAdapter constructor(private var arts: MutableList<ArtModel>,
                              private val listener: ArtListener
 ) : RecyclerView.Adapter<ArtAdapter.MainHolder>(), Filterable {
 
@@ -70,6 +70,11 @@ class ArtAdapter constructor(private var arts: List<ArtModel>,
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val art = arts[holder.adapterPosition]
         holder.bind(art, listener)
+    }
+
+    fun removeAt(position: Int) {
+        arts.removeAt(position)
+        notifyItemRemoved(position)
     }
 
     override fun getItemCount(): Int = arts.size

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import wit.mobileappca.artshare.main.MainApp
 import wit.mobileappca.artshare.models.ArtJSONStore
+import wit.mobileappca.artshare.models.ArtManager
 import wit.mobileappca.artshare.models.ArtModel
 import java.util.Calendar.getInstance
 
@@ -16,8 +17,7 @@ class CreateViewModel : ViewModel() {
 
     fun addArt(art: ArtModel) {
         status.value = try {
-            // no longer functional, to be changed
-            //app.arts.create(art.copy())
+            ArtManager.create(art)
             true
         } catch (e: IllegalArgumentException) {
             false
