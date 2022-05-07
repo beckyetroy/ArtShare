@@ -17,7 +17,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import kotlinx.android.synthetic.main.fragment_create.*
 import org.jetbrains.anko.toast
 import wit.mobileappca.artshare.R
@@ -70,11 +72,6 @@ class CreateFragment : Fragment() {
                 status -> status?.let { render(status) }
         })
 
-        //set Pinterest button to invisible and date to not render by default
-        fragBinding.pinterestBtn.isInvisible = true
-        fragBinding.date.isGone = true
-        fragBinding.dateTitle.isGone = true
-
         val category: Spinner = fragBinding.artType
         // Create an ArrayAdapter using the artType array and a default spinner layout
         activity?.let {
@@ -87,36 +84,6 @@ class CreateFragment : Fragment() {
                 // Apply the adapter to the category
                 category.adapter = adapter
             }
-        }
-
-        if (arguments?.isEmpty == false) {
-            edit = true
-            art = requireArguments().getParcelable<ArtModel>("art_edit")!!
-            //populate the fields
-            fragBinding.artTitle.setText(art.title)
-            fragBinding.artDescription.setText(art.description)
-
-            var res: Resources = resources
-            var types = res.getStringArray(R.array.category_array)
-
-            var index = types.indexOf(art.type)
-            fragBinding.artType.setSelection(index)
-
-            //show the date and date title with value
-            fragBinding.dateTitle.isGone = false
-            fragBinding.date.isGone = false
-            fragBinding.date.text = art.date.toString()
-
-            //display image stored and update button text
-            fragBinding.artImage.setImageBitmap(readImageFromPath(fragBinding.artImage.context, art.image))
-            fragBinding.chooseImage.setText(R.string.change_image)
-
-            //update location button from 'add location' to 'change location'
-            fragBinding.artLocation.setText(R.string.change_button_location)
-            //update 'add artwork' text on button to 'save artwork'
-            fragBinding.btnAdd.setText(R.string.save_art)
-            //display the Pinterest Button
-            fragBinding.pinterestBtn.isInvisible = false
         }
 
         fragBinding.artLocation.setOnClickListener {
@@ -162,31 +129,9 @@ class CreateFragment : Fragment() {
                 Toast.makeText(context, R.string.enter_art,Toast.LENGTH_LONG).show()
             }
             else {
-                if (edit) {
-                    //update the stored values
-                    createViewModel.updateArt(art)
-                } else {
-                    //create the art piece
-                    createViewModel.addArt(art)
-                }
+                //create the art piece
+                    createViewModel.addArt(loggedInViewModel.liveFirebaseUser, art)
                 Toast.makeText(context, R.string.save_success,Toast.LENGTH_LONG).show()
-                //go back to view fragment
-                val fm: FragmentManager? = fragmentManager
-                if (fm != null) {
-                    if (fm.backStackEntryCount > 0) {
-                        fm.popBackStack()
-                    }
-                }
-                if (!edit) {
-                    activity?.recreate()
-                }
-                else {
-                    val listFragment = ListFragment()
-                    fragmentManager
-                        ?.beginTransaction()
-                        ?.replace(R.id.nav_host_fragment, listFragment)
-                        ?.commit()
-                }
             }
         }
 
@@ -196,17 +141,6 @@ class CreateFragment : Fragment() {
             if ((fragBinding.artImage.drawable as BitmapDrawable).bitmap != null) {
                 bm = (fragBinding.artImage.drawable as BitmapDrawable).bitmap.toString()
             }
-        }
-
-        fragBinding.pinterestBtn.setOnClickListener {
-            val pinterest = Intent(
-                //Sends the User to Pinterest to compare similarly titled works
-                Intent.ACTION_VIEW,
-                Uri.parse("https://www.pinterest.ie/search/pins/?q=" + art.title + "%20" +
-                        art.type)
-            )
-            //starts the activity
-            startActivity(pinterest)
         }
 
         return root;
@@ -271,18 +205,6 @@ class CreateFragment : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            CreateFragment().apply {
-                arguments = Bundle().apply {}
-            }
-    }
-
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

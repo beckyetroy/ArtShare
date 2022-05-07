@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.ContentValues
 
 
+//No longer applicable with FB storage, commented out old code
+
 abstract class ArtDBStore(context: Context, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int)
     : SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION), ArtStore
 {
@@ -47,6 +49,7 @@ abstract class ArtDBStore(context: Context, name: String?, factory: SQLiteDataba
         val COLUMN_ZOOM = "zoom"
     }
 
+    /*
     override fun findAll(): List<ArtModel> {
         val query = "SELECT * FROM $TABLE_ART"
         val db = this.writableDatabase
@@ -90,6 +93,7 @@ abstract class ArtDBStore(context: Context, name: String?, factory: SQLiteDataba
         db.insert(TABLE_ART, null, values)
         db.close()
     }
+     */
 
     override fun search(searchTerm: String): List<ArtModel> {
         val query = "SELECT * FROM $TABLE_ART WHERE $COLUMN_TITLE.contains(\"$searchTerm\")"
@@ -103,7 +107,7 @@ abstract class ArtDBStore(context: Context, name: String?, factory: SQLiteDataba
         if (cursor.moveToFirst()) {
             cursor.moveToFirst()
 
-            val id = Integer.parseInt(cursor.getString(0)).toLong()
+            val id = Integer.parseInt(cursor.getString(0)).toString()
             val title = cursor.getString(1)
             val image = cursor.getString(2)
             val type = cursor.getString(3)
@@ -120,6 +124,7 @@ abstract class ArtDBStore(context: Context, name: String?, factory: SQLiteDataba
         return arts
     }
 
+    /*
     override fun update(email: String, art: ArtModel) {
         val db = this.writableDatabase
         val values = ContentValues()
@@ -151,5 +156,6 @@ abstract class ArtDBStore(context: Context, name: String?, factory: SQLiteDataba
         }
         db.close()
     }
+     */
 
 }

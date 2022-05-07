@@ -13,7 +13,6 @@
     <string name="action_create">Add Artwork</string>
     <string name="group_communicate">Communicate</string>
     <string name="nav_header_title">ArtShare</string>
-    <string name="nav_header_subtitle">by 20088744@mail.wit.ie</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="enter_art_title">Please enter an Artwork Title </string>
     <string name="enter_art">Please upload your artwork first! </string>
@@ -37,10 +36,14 @@
     <string name="artError">Error : Couldn\'t Create Artwork</string>
     <string name="about_heading">About ArtShare</string>
     <string name="artsNotFound">No Artwork Yet…\nUpload some now!</string>
+    <string name="likes_title">Likes</string>
+    <string name="likes">0</string>
+    <string name="button_editArt">Edit</string>
+    <string name="button_deleteArt">Delete</string>
 
     <!-- Firebase Resources-->
 
-    <string name="login_title">Login now to get started!</string>
+    <string name="login_title">Login or Sign Up now to get started!</string>
     <string name="signed_out">Signed out.</string>
     <string name="hint_email">Email Address</string>
     <string name="hint_password">Password</string>
@@ -51,4 +54,5 @@
     <string name="sign_out">Sign Out</string>
     <string name="nav_header_user">Signed in as: beckyet19@gmail.com</string>
     <string name="messageLoading"> Loading. Please Wait ...</string>
+
 </resources>

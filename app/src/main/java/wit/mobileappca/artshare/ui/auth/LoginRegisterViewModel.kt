@@ -3,6 +3,7 @@ package wit.mobileappca.artshare.ui.auth
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseUser
 import wit.mobileappca.artshare.firebase.FirebaseAuthManager
 
@@ -17,5 +18,9 @@ class LoginRegisterViewModel (app: Application) : AndroidViewModel(app) {
 
     fun register(email: String?, password: String?) {
         firebaseAuthManager.register(email, password)
+    }
+
+    fun authWithGoogle(acct: GoogleSignInAccount) {
+        firebaseAuthManager.firebaseAuthWithGoogle(acct)
     }
 }
