@@ -36,9 +36,8 @@ class ListFragment : Fragment(), ArtListener {
     private var _fragBinding: FragmentListBinding? = null
     private val fragBinding get() = _fragBinding!!
     lateinit var loader : AlertDialog
+    private val listViewModel: ListViewModel by activityViewModels()
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
-
-    private lateinit var listViewModel: ListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,11 +54,8 @@ class ListFragment : Fragment(), ArtListener {
         activity?.title = getString(R.string.app_name)
         loader = createLoader(requireActivity())
 
-        listViewModel =
-            ViewModelProvider(this).get(ListViewModel::class.java)
-
-        val fab: FloatingActionButton = fragBinding.fab
-        fab.setOnClickListener {
+        fragBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
+        fragBinding.fab.setOnClickListener {
             val action = ListFragmentDirections.actionListFragmentToCreateFragment()
             findNavController().navigate(action)
         }
@@ -80,8 +76,8 @@ class ListFragment : Fragment(), ArtListener {
                 showLoader(loader,"Deleting Artwork")
                 val adapter = fragBinding.recyclerView.adapter as ArtAdapter
                 adapter.removeAt(viewHolder.adapterPosition)
-                listViewModel.delete(listViewModel.liveFirebaseUser.value?.email!!,
-                    (viewHolder.itemView.tag as ArtModel))
+                listViewModel.delete(listViewModel.liveFirebaseUser.value?.uid!!,
+                    (viewHolder.itemView.tag as ArtModel).id!!)
                 hideLoader(loader)
             }
         }
@@ -98,7 +94,6 @@ class ListFragment : Fragment(), ArtListener {
         itemTouchEditHelper.attachToRecyclerView(fragBinding.recyclerView)
 
         fragBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        fragBinding.recyclerView.adapter = ArtAdapter(app.arts.findAll() as MutableList<ArtModel>, this)
         fragBinding.recyclerView.adapter?.notifyDataSetChanged();
 
         fragBinding.artSearch.setOnQueryTextListener(object: SearchView.OnQueryTextListener,
@@ -173,18 +168,18 @@ class ListFragment : Fragment(), ArtListener {
 
     override fun onResume() {
         super.onResume()
-        listViewModel.load()
+        showLoader(loader,"Downloading Artwork")
+        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner, Observer { firebaseUser ->
+            if (firebaseUser != null) {
+                listViewModel.liveFirebaseUser.value = firebaseUser
+                listViewModel.load()
+            }
+        })
     }
 
     override fun onArtClick(art: ArtModel) {
-        val args = Bundle()
-        args.putParcelable("art_edit", art)
-        val editFragment = CreateFragment()
-        editFragment.arguments = args
-        fragmentManager
-            ?.beginTransaction()
-            ?.add(R.id.nav_host_fragment, editFragment)
-            ?.commit()
+        val action = ListFragmentDirections.actionListFragmentToArtDetailFragment(art.id!!)
+        findNavController().navigate(action)
     }
 
     fun showArts(arts: List<ArtModel>) {

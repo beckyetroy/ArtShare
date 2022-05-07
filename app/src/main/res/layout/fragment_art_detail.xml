@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="artvm"
+            type="wit.mobileappca.artshare.ui.detail.ArtDetailViewModel" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="wit.mobileappca.artshare.ui.detail.ArtDetailFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/artTitle"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:autofillHints=""
+                android:hint="@string/hint_artTitle"
+                android:inputType="text"
+                android:maxLength="50"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/artImage"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/chooseImage"
+                android:layout_width="216dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@color/green"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="@string/change_image"
+                android:textColor="@color/design_default_color_on_primary"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="315dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/selectType"
+                    android:layout_width="99dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/art_type" />
+
+                <Spinner
+                    android:id="@+id/artType"
+                    android:layout_width="194dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/artDescription"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:autofillHints=""
+                android:hint="@string/hint_artDescription"
+                android:inputType="textMultiLine"
+                android:maxLength="250"
+                android:maxLines="5"
+                android:padding="8dp"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="373dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/dateTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/date_title" />
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="238dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Now" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="373dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/likesTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/likes_title" />
+
+                <TextView
+                    android:id="@+id/likes"
+                    android:layout_width="238dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/likes" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/artLocation"
+                    android:layout_width="285dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:background="@color/green"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:stateListAnimator="@null"
+                    android:text="@string/change_button_location"
+                    android:textColor="@color/design_default_color_on_primary"
+                    android:textSize="16sp"
+                    tools:ignore="TextContrastCheck" />
+
+                <ImageView
+                    android:id="@+id/infoBtn"
+                    android:layout_width="53dp"
+                    android:layout_height="78dp"
+                    android:contentDescription="TODO"
+                    app:srcCompat="@android:drawable/ic_menu_info_details" />
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/pinterestBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@color/dark_blue"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:stateListAnimator="@null"
+                android:text="@string/button_pinterest"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                tools:ignore="TextContrastCheck" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnEdit"
+                    android:layout_width="176dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:background="@color/purple"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:stateListAnimator="@null"
+                    android:text="@string/button_editArt"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnDelete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:background="@color/red"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:stateListAnimator="@null"
+                    android:text="@string/button_deleteArt"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

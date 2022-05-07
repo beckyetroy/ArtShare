@@ -1,19 +1,18 @@
 package wit.mobileappca.artshare.models
 
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseUser
 
 interface ArtStore {
-    fun findAll(): List<ArtModel>
     fun findAll(artsList:
                 MutableLiveData<List<ArtModel>>)
-    fun findAll(email:String,
-                donationsList:
+    fun findAll(userid:String,
+                artsList:
                 MutableLiveData<List<ArtModel>>)
-    fun findById(email:String, id: String,
+    fun findById(userid:String, artid: String,
                  art: MutableLiveData<ArtModel>)
-    fun create(art: ArtModel)
+    fun create(firebaseUser: MutableLiveData<FirebaseUser>, art: ArtModel)
     fun search(searchTerm: String): List<ArtModel>
-    fun update(email: String, art: ArtModel)
-    fun delete(email:String, art: ArtModel)
-
+    fun delete(userid:String, artid: String)
+    fun update(userid:String, artid: String, art: ArtModel)
 }

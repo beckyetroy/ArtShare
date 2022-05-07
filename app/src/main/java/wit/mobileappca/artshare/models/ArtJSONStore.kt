@@ -2,6 +2,7 @@ package wit.mobileappca.artshare.models
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseUser
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -19,6 +20,8 @@ fun generateRandomId(): Long {
     return Random().nextLong()
 }
 
+//No longer applicable with FB storage, commented out old code
+
 class ArtJSONStore : ArtStore, AnkoLogger {
 
     val context: Context
@@ -31,15 +34,17 @@ class ArtJSONStore : ArtStore, AnkoLogger {
         }
     }
 
+    /*
     override fun findAll(): MutableList<ArtModel> {
         return arts
     }
+     */
 
     override fun findAll(artsList: MutableLiveData<List<ArtModel>>) {
         TODO("Not yet implemented")
     }
 
-    override fun findAll(email: String, donationsList: MutableLiveData<List<ArtModel>>) {
+    override fun findAll(email: String, artsList: MutableLiveData<List<ArtModel>>) {
         TODO("Not yet implemented")
     }
 
@@ -47,16 +52,29 @@ class ArtJSONStore : ArtStore, AnkoLogger {
         TODO("Not yet implemented")
     }
 
-    override fun create(art: ArtModel) {
-        art.id = generateRandomId()
-        arts.add(art)
-        serialize()
+    override fun create(firebaseUser: MutableLiveData<FirebaseUser>, art: ArtModel) {
+        TODO("Not yet implemented")
     }
+
+    //override fun create(art: ArtModel) {
+    //    art.id = generateRandomId().toString()
+    //    arts.add(art)
+    //    serialize()
+    //}
 
     override fun search(searchTerm: String): List<ArtModel> {
         return arts.filter { art -> art.title.toLowerCase().contains(searchTerm.toLowerCase()) }
     }
 
+    override fun delete(userid: String, artid: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun update(userid: String, artid: String, art: ArtModel) {
+        TODO("Not yet implemented")
+    }
+
+    /*
     override fun update(email: String, art: ArtModel) {
         val artsList = findAll() as ArrayList<ArtModel>
         var foundArt: ArtModel? = artsList.find { m -> m.id == art.id }
@@ -79,6 +97,8 @@ class ArtJSONStore : ArtStore, AnkoLogger {
         arts.remove(art)
         serialize()
     }
+
+     */
 
     private fun serialize() {
         val jsonString = gsonBuilder.toJson(arts, listType)

@@ -34,13 +34,7 @@
             android:name="wit.mobileappca.artshare.activities.GMapsActivity"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name="wit.mobileappca.artshare.ui.home.Home"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:name="wit.mobileappca.artshare.ui.home.Home">
         </activity>
     </application>
 

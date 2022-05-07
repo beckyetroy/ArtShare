@@ -26,5 +26,24 @@
             app:destination="@id/createFragment"
             app:enterAnim="@anim/nav_default_pop_enter_anim"
             app:exitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_listFragment_to_artDetailFragment"
+            app:destination="@id/artDetailFragment"
+            app:enterAnim="@anim/nav_default_pop_enter_anim"
+            app:exitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/artDetailFragment"
+        android:name="wit.mobileappca.artshare.ui.detail.ArtDetailFragment"
+        android:label="ArtWork Details"
+        tools:layout="@layout/fragment_art_detail" >
+        <action
+            android:id="@+id/action_artDetailFragment_to_listFragment"
+            app:destination="@id/listFragment"
+            app:enterAnim="@anim/nav_default_pop_enter_anim"
+            app:exitAnim="@anim/nav_default_pop_exit_anim"/>
+        <argument
+            android:name="artid"
+            app:argType="string" />
     </fragment>
 </navigation>
