@@ -9,12 +9,9 @@ import timber.log.Timber.i
 
 class MainApp : Application(), AnkoLogger {
 
-    lateinit var arts: ArtStore
-
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
-        arts = ArtJSONStore(applicationContext)
         i("ArtShare started")
     }
 }

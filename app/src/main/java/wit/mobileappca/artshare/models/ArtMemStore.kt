@@ -43,7 +43,7 @@ class ArtMemStore : ArtStore, AnkoLogger {
 
     /*
     override fun create(art: ArtModel) {
-        art.id = getId()
+        art.uid = getUid()
         arts.add(art)
         logAll()
     }
@@ -63,7 +63,7 @@ class ArtMemStore : ArtStore, AnkoLogger {
 
     /*
     override fun update(email: String, art: ArtModel) {
-        var foundArt: ArtModel? = arts.find { m -> m.id == art.id }
+        var foundArt: ArtModel? = arts.find { m -> m.uid == art.uid }
         if (foundArt != null) {
             foundArt.title = art.title
             foundArt.image = art.image

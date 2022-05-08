@@ -22,19 +22,20 @@
         <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/activity_art_list.xml" value="0.3673851921274602" />
         <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/activity_g_maps.xml" value="0.1" />
         <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/app_bar_home.xml" value="0.17255434782608695" />
-        <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/card_art.xml" value="0.33" />
+        <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/card_art.xml" value="0.2611464968152866" />
         <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/content_home.xml" value="0.17255434782608695" />
-        <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/fragment_art_detail.xml" value="0.25" />
+        <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/fragment_art_detail.xml" value="0.33" />
         <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/fragment_create.xml" value="0.1" />
-        <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/fragment_list.xml" value="0.22" />
+        <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/fragment_list.xml" value="0.2" />
         <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/fragment_view.xml" value="0.18" />
         <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/home.xml" value="0.1" />
         <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/loading.xml" value="0.22" />
         <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/login.xml" value="0.18" />
-        <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/nav_header.xml" value="0.33" />
+        <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/nav_header.xml" value="0.1" />
+        <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/layout/togglebutton_layout.xml" value="0.1" />
         <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/menu/menu_art.xml" value="0.18796296296296297" />
         <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/menu/menu_create.xml" value="0.1" />
-        <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/menu/menu_list.xml" value="0.11666666666666667" />
+        <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/menu/menu_list.xml" value="0.22" />
         <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/menu/menu_main.xml" value="0.22" />
         <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/menu/menu_view.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/20088/AndroidStudioProjects/ArtShare/app/src/main/res/menu/nav_drawer_menu.xml" value="0.67" />

@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/listFragment"
-        android:orderInCategory="100"
-        android:title="TODO"
-        app:showAsAction="never" />
+        android:id="@+id/toggleArts"
+        android:title=""
+        app:actionLayout="@layout/togglebutton_layout"
+        app:showAsAction="always" />
 
 </menu>

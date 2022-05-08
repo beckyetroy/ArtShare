@@ -13,26 +13,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/art_search"
-            android:layout_width="466dp"
-            android:layout_height="57dp"
-            android:background="@color/light_yellow"
-            android:textCursorDrawable="@null"
-            app:iconifiedByDefault="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:queryBackground="@null"
-            tools:ignore="MissingConstraints" />
-
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swiperefresh"
             android:layout_width="463dp"
             android:layout_height="727dp"
+            android:layout_marginTop="400dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.518"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/art_search"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.85">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -41,9 +31,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:scrollbars="vertical"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            </androidx.recyclerview.widget.RecyclerView>
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -62,6 +50,16 @@
             tools:text="Artwork not Found." />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/art_search"
+        android:layout_width="466dp"
+        android:layout_height="57dp"
+        android:background="@color/light_yellow"
+        android:textCursorDrawable="@null"
+        app:iconifiedByDefault="false"
+        app:queryBackground="@null"
+        tools:ignore="MissingConstraints" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

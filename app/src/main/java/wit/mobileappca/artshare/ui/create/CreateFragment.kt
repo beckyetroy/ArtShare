@@ -1,5 +1,7 @@
 package wit.mobileappca.artshare.ui.create
 
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.drawable.BitmapDrawable
@@ -9,6 +11,8 @@ import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
@@ -22,10 +26,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import kotlinx.android.synthetic.main.fragment_create.*
 import org.jetbrains.anko.toast
+import timber.log.Timber
 import wit.mobileappca.artshare.R
 import wit.mobileappca.artshare.activities.GMapsActivity
 import wit.mobileappca.artshare.databinding.FragmentCreateBinding
-import wit.mobileappca.artshare.helpers.readImageFromPath
+import wit.mobileappca.artshare.firebase.FirebaseImageManager
+import wit.mobileappca.artshare.helpers.readImageUri
 import wit.mobileappca.artshare.helpers.showImagePicker
 import wit.mobileappca.artshare.main.MainApp
 import wit.mobileappca.artshare.models.ArtModel
@@ -38,23 +44,22 @@ import java.util.Calendar.getInstance
 
 class CreateFragment : Fragment() {
 
-    lateinit var app: MainApp
     private var _fragBinding: FragmentCreateBinding? = null
     private val fragBinding get() = _fragBinding!!
     private lateinit var createViewModel: CreateViewModel
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
+    private lateinit var intentLauncher : ActivityResultLauncher<Intent>
 
     var art = ArtModel()
     var edit = false
-    val imgRequest = 1
     val locationRequest = 2
     var bm = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        app = activity?.application as MainApp
         setHasOptionsMenu(true)
-        //navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
+        registerImagePickerCallback()
+        //navController = Navigation.findNavController(activity!!, R.uid.nav_host_fragment)
     }
 
     override fun onCreateView(
@@ -67,7 +72,6 @@ class CreateFragment : Fragment() {
 
         createViewModel =
             ViewModelProvider(this).get(CreateViewModel::class.java)
-        //val textView: TextView = root.findViewById(R.id.text_home)
         createViewModel.observableStatus.observe(viewLifecycleOwner, Observer {
                 status -> status?.let { render(status) }
         })
@@ -106,41 +110,11 @@ class CreateFragment : Fragment() {
             activity?.applicationContext?.toast(R.string.location_info)
         }
 
-        fragBinding.btnAdd.setOnClickListener() {
-            //parse the fields and assign them to their relevant values
-            art.title = artTitle.text.toString()
-            art.image = bm
-            art.description = artDescription.text.toString()
-            art.type = artType.selectedItem.toString()
-            art.date = getInstance().time
-            art.email = loggedInViewModel.liveFirebaseUser.value?.email!!
-
-            //validation
-            if (art.title.isEmpty()) {
-                //title cannot be null - display error message
-                Toast.makeText(context, R.string.enter_art_title,Toast.LENGTH_LONG).show()
-            }
-            else if (art.type.isEmpty()) {
-                //type cannot be null - display error message
-                Toast.makeText(context, R.string.enter_art_type,Toast.LENGTH_LONG).show()
-            }
-            else if (art.image == null) {
-                //image string cannot be empty - display error message
-                Toast.makeText(context, R.string.enter_art,Toast.LENGTH_LONG).show()
-            }
-            else {
-                //create the art piece
-                    createViewModel.addArt(loggedInViewModel.liveFirebaseUser, art)
-                Toast.makeText(context, R.string.save_success,Toast.LENGTH_LONG).show()
-            }
-        }
+        setButtonListener(fragBinding)
 
         fragBinding.chooseImage.setOnClickListener {
             //open image picker
-            activity?.let { it1 -> showImagePicker(it1, imgRequest) }
-            if ((fragBinding.artImage.drawable as BitmapDrawable).bitmap != null) {
-                bm = (fragBinding.artImage.drawable as BitmapDrawable).bitmap.toString()
-            }
+            showImagePicker(intentLauncher)
         }
 
         return root;
@@ -155,6 +129,65 @@ class CreateFragment : Fragment() {
             }
             false -> Toast.makeText(context,getString(R.string.artError),Toast.LENGTH_LONG).show()
         }
+    }
+
+    fun setButtonListener(layout: FragmentCreateBinding) {
+        layout.btnAdd.setOnClickListener() {
+            //parse the fields and assign them to their relevant values
+            var title = artTitle.text.toString()
+            var image = bm
+            var description = artDescription.text.toString()
+            var type = artType.selectedItem.toString()
+
+            var res: Resources = resources
+            var types = res.getStringArray(R.array.category_array)
+
+            var typeIndex = types.indexOf(art.type)
+
+            var date = getInstance().time
+            var email = loggedInViewModel.liveFirebaseUser.value?.email!!
+
+            //validation
+            if (title.isEmpty()) {
+                //title cannot be null - display error message
+                Toast.makeText(context, R.string.enter_art_title,Toast.LENGTH_LONG).show()
+            }
+            else if (type.isEmpty()) {
+                //type cannot be null - display error message
+                Toast.makeText(context, R.string.enter_art_type,Toast.LENGTH_LONG).show()
+            }
+            else if (image == null) {
+                //image string cannot be empty - display error message
+                Toast.makeText(context, R.string.enter_art,Toast.LENGTH_LONG).show()
+            }
+            else {
+                //create the art piece
+                createViewModel.addArt(loggedInViewModel.liveFirebaseUser,
+                    ArtModel(title = title, image = image, description = description,
+                    type = type, typeIndex = typeIndex, date = date, email = email))
+                Toast.makeText(context, R.string.save_success,Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun registerImagePickerCallback() {
+        intentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                when(result.resultCode){
+                    RESULT_OK -> {
+                        if (result.data != null) {
+                            Timber.i("registerPickerCallback() ${readImageUri(result.resultCode, result.data).toString()}")
+                            FirebaseImageManager
+                                .updateImage(loggedInViewModel.liveFirebaseUser.value!!.uid,
+                                    loggedInViewModel.liveFirebaseUser.value!!.uid,
+                                    readImageUri(result.resultCode, result.data),
+                                    fragBinding.artImage,
+                                    true)
+                        } // end of if
+                    }
+                    RESULT_CANCELED -> { } else -> { }
+                }
+            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -183,24 +216,6 @@ class CreateFragment : Fragment() {
                 email.type = "message/rfc822"
                 //starts the activity by choosing an email client, then going to send the email
                 startActivity(Intent.createChooser(email, "Choose an Email client :"))
-            }
-            R.id.item_delete -> {
-                val builder = activity?.let { AlertDialog.Builder(it) }
-                builder?.setMessage(("Are you sure you want to delete this artwork?"))
-                    ?.setCancelable(false)?.setPositiveButton("Yes") { dialog, id ->
-                        // Delete item
-                        createViewModel.deleteArt(art)
-                        val listFragment = ListFragment()
-                        fragmentManager
-                            ?.beginTransaction()
-                            ?.add(R.id.nav_host_fragment, listFragment)
-                            ?.commit()
-                }?.setNegativeButton("Cancel") { dialog, id ->
-                    // Dismiss the dialog
-                    dialog.dismiss()
-                }
-                //display confirmation dialog
-                builder?.create()?.show()
             }
         }
         return super.onOptionsItemSelected(item)

@@ -60,7 +60,7 @@ abstract class ArtDBStore(context: Context, name: String?, factory: SQLiteDataba
         if (cursor.moveToFirst()) {
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                val id = Integer.parseInt(cursor.getString(0)).toLong()
+                val uid = Integer.parseInt(cursor.getString(0)).toLong()
                 val title = cursor.getString(1)
                 val image = cursor.getString(2)
                 val type = cursor.getString(3)
@@ -68,7 +68,7 @@ abstract class ArtDBStore(context: Context, name: String?, factory: SQLiteDataba
                 val lat = cursor.getDouble(6)
                 val lng = cursor.getDouble(7)
                 val zoom = cursor.getFloat(8)
-                arts.add(ArtModel(id, title = title, image = image, type = type,
+                arts.add(ArtModel(uid, title = title, image = image, type = type,
                         description = description, lat = lat, lng = lng, zoom = zoom))
                 cursor.moveToNext()
             }
@@ -149,9 +149,9 @@ abstract class ArtDBStore(context: Context, name: String?, factory: SQLiteDataba
         val cursor = db.rawQuery(query, null)
 
         if (cursor.moveToFirst()) {
-            val id = Integer.parseInt(cursor.getString(0))
+            val uid = Integer.parseInt(cursor.getString(0))
             db.delete(TABLE_ART, COLUMN_ID + " = ?",
-                    arrayOf(id.toString()))
+                    arrayOf(uid.toString()))
             cursor.close()
         }
         db.close()

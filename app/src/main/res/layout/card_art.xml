@@ -15,34 +15,50 @@
     android:elevation="24dp">
 
     <RelativeLayout
+        android:id="@+id/cardArt"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="16dp">
 
         <ImageView
-            android:id="@+id/imageIcon"
-            android:layout_width="106dp"
-            android:layout_height="80dp"
+            android:id="@+id/image"
+            android:layout_width="181dp"
+            android:layout_height="158dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="0dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:contentDescription="@string/art_image" />
 
         <TextView
-            android:id="@+id/artTitle"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/imageIcon"
+            android:layout_toEndOf="@+id/image"
+            android:text="@{art.title}"
             android:textSize="30sp" />
 
         <TextView
-            android:id="@+id/artType"
+            android:id="@+id/type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/artTitle"
-            android:layout_toEndOf="@+id/imageIcon" />
+            android:layout_below="@id/title"
+            android:layout_toEndOf="@+id/image"
+            android:text="@{art.type}" />
+
+        <ImageView
+            android:id="@+id/imagefavourite"
+            android:layout_width="44dp"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="110dp"
+            android:layout_marginTop="145dp"
+            android:layout_marginEnd="28dp"
+            android:layout_toEndOf="@+id/title"
+            app:srcCompat="@drawable/ic_like" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

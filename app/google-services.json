@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "795654874093",
-    "project_id": "linen-works-312215",
-    "storage_bucket": "linen-works-312215.appspot.com"
+    "project_number": "367040491190",
+    "firebase_url": "https://artshare-fa217-default-rtdb.firebaseio.com",
+    "project_id": "artshare-fa217",
+    "storage_bucket": "artshare-fa217.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:795654874093:android:281c0bc3dd2d611499fde4",
+        "mobilesdk_app_id": "1:367040491190:android:96a280356932aa45dac017",
         "android_client_info": {
           "package_name": "wit.mobileappca.artshare"
         }
       },
       "oauth_client": [
         {
-          "client_id": "795654874093-8m4eor41caojnuqn1gsq8ukdbmk780qg.apps.googleusercontent.com",
+          "client_id": "367040491190-qka8olv2to0aesv4n2mjn41jfc85tnib.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBPHc5KgJ-_rc8tol5YvZrQ3hbTePwY4GA"
+          "current_key": "AIzaSyD0ZZWCJ6HJp8c7Gq-LtKp-Wv51bWg24AI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "795654874093-8m4eor41caojnuqn1gsq8ukdbmk780qg.apps.googleusercontent.com",
+              "client_id": "367040491190-7jrsoueq2urh0nkatg7cv7fub2obolrb.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

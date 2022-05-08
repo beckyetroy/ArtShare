@@ -4,20 +4,23 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.card_art.view.*
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.Picasso
 import wit.mobileappca.artshare.databinding.CardArtBinding
-import wit.mobileappca.artshare.helpers.readImageFromPath
+import wit.mobileappca.artshare.helpers.customTransformation
 import wit.mobileappca.artshare.models.ArtModel
 import java.util.*
 
 
-interface ArtListener {
+interface ArtClickListener {
     fun onArtClick(art: ArtModel)
 }
 
 class ArtAdapter constructor(private var arts: MutableList<ArtModel>,
-                             private val listener: ArtListener
+                             private val listener: ArtClickListener,
+                             private val readOnly: Boolean
 ) : RecyclerView.Adapter<ArtAdapter.MainHolder>(), Filterable {
 
     var artFilterList = ArrayList<ArtModel>()
@@ -64,7 +67,7 @@ class ArtAdapter constructor(private var arts: MutableList<ArtModel>,
         val binding = CardArtBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return MainHolder(binding)
+        return MainHolder(binding, readOnly)
     }
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
@@ -79,22 +82,22 @@ class ArtAdapter constructor(private var arts: MutableList<ArtModel>,
 
     override fun getItemCount(): Int = arts.size
 
-    class MainHolder(val binding : CardArtBinding) : RecyclerView.ViewHolder(binding.root) {
+    class MainHolder(val binding : CardArtBinding, private val readOnly : Boolean) : RecyclerView.ViewHolder(binding.root) {
+        val readOnlyRow = readOnly
 
-        fun bind(art: ArtModel, listener : ArtListener) {
-            //populates the art cards with title, description, and image
+        fun bind(art: ArtModel, listener : ArtClickListener) {
+            binding.root.tag = art
             binding.art = art
-            binding.imageIcon.setImageBitmap(readImageFromPath(itemView.context, art.image))
-            binding.artTitle.text = art.title
-            binding.artType.text = art.type
-            //start method onArtClick for that particular art
+
+            Picasso.get().load(art.image.toUri())
+                .resize(200, 200)
+                .transform(customTransformation())
+                .centerCrop()
+                .memoryPolicy(MemoryPolicy.NO_CACHE)
+                .into(binding.image)
+
             binding.root.setOnClickListener { listener.onArtClick(art) }
             binding.executePendingBindings()
-            //itemView.artTitle.text = art.title
-            //itemView.artType.text = art.type
-            //itemView.imageIcon.setImageBitmap(readImageFromPath(itemView.context, art.image))
-            //start method onArtClick for that particular art
-            //itemView.setOnClickListener { listener.onArtClick(art) }
         }
     }
 }
