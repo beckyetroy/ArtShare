@@ -1,9 +1,15 @@
 package wit.mobileappca.artshare.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -12,14 +18,22 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import com.google.firebase.auth.FirebaseUser
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_create.*
+import timber.log.Timber
 import wit.mobileappca.artshare.R
 import wit.mobileappca.artshare.databinding.HomeBinding
 import wit.mobileappca.artshare.databinding.NavHeaderBinding
-import wit.mobileappca.artshare.helpers.readImage
+import wit.mobileappca.artshare.firebase.FirebaseImageManager
+import wit.mobileappca.artshare.helpers.customTransformation
+import wit.mobileappca.artshare.helpers.readImageUri
+import wit.mobileappca.artshare.helpers.showImagePicker
 import wit.mobileappca.artshare.models.Location
 import wit.mobileappca.artshare.ui.auth.LoggedInViewModel
 import wit.mobileappca.artshare.ui.auth.Login
+import wit.mobileappca.artshare.ui.map.MapsViewModel
+import wit.mobileappca.artshare.utils.checkLocationPermissions
+import wit.mobileappca.artshare.utils.isPermissionGranted
 
 class Home : AppCompatActivity() {
 
@@ -28,8 +42,9 @@ class Home : AppCompatActivity() {
     private lateinit var navHeaderBinding : NavHeaderBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var loggedInViewModel : LoggedInViewModel
-    val imgRequest = 1
-    val locationRequest = 2
+    private lateinit var headerView : View
+    private lateinit var intentLauncher : ActivityResultLauncher<Intent>
+    private val mapsViewModel : MapsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,11 +63,32 @@ class Home : AppCompatActivity() {
         // menu should be considered as top level destinations.
 
         appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.createFragment, R.id.listFragment), drawerLayout)
+            R.id.createFragment, R.id.listFragment, R.id.mapsFragment), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         val navView = homeBinding.navView
         navView.setupWithNavController(navController)
+
+        initNavHeader()
+
+        if(checkLocationPermissions(this)) {
+            mapsViewModel.updateCurrentLocation()
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (isPermissionGranted(requestCode, grantResults))
+            mapsViewModel.updateCurrentLocation()
+        else {
+            // permissions denied, so use a default location
+            mapsViewModel.currentLocation.value = android.location.Location("Default").apply {
+                latitude = 52.245696
+                longitude = -7.139102
+            }
+        }
+        Timber.i("LOC : %s", mapsViewModel.currentLocation.value)
     }
 
     public override fun onStart() {
@@ -60,7 +96,7 @@ class Home : AppCompatActivity() {
         loggedInViewModel = ViewModelProvider(this).get(LoggedInViewModel::class.java)
         loggedInViewModel.liveFirebaseUser.observe(this, Observer { firebaseUser ->
             if (firebaseUser != null) {
-                updateNavHeader(loggedInViewModel.liveFirebaseUser.value!!)
+                updateNavHeader(firebaseUser)
             }
         })
 
@@ -70,12 +106,52 @@ class Home : AppCompatActivity() {
             }
         })
 
+        registerImagePickerCallback()
+    }
+
+    private fun initNavHeader() {
+        Timber.i("Init Nav Header")
+        headerView = homeBinding.navView.getHeaderView(0)
+        navHeaderBinding = NavHeaderBinding.bind(headerView)
+
+        navHeaderBinding.navHeaderImage.setOnClickListener {
+            showImagePicker(intentLauncher)
+        }
     }
 
     private fun updateNavHeader(currentUser: FirebaseUser) {
-        var headerView = homeBinding.navView.getHeaderView(0)
-        navHeaderBinding = NavHeaderBinding.bind(headerView)
-        navHeaderBinding.navHeaderEmail.text = "Signed in as: " + currentUser.email
+        FirebaseImageManager.imageUri.observe(this) { result ->
+            if (result == Uri.EMPTY) {
+                Timber.i("DX NO Existing imageUri")
+                if (currentUser.photoUrl != null) {
+                    //if you're a google user
+                    FirebaseImageManager.updateUserImage(
+                        currentUser.uid,
+                        currentUser.photoUrl,
+                        navHeaderBinding.navHeaderImage,
+                        false
+                    )
+                } else {
+                    Timber.i("Loading Existing Default imageUri")
+                    FirebaseImageManager.updateDefaultImage(
+                        currentUser.uid,
+                        R.mipmap.artshare_launcher,
+                        navHeaderBinding.navHeaderImage
+                    )
+                }
+            } else // load existing image from firebase
+            {
+                Timber.i("Loading Existing imageUri")
+                FirebaseImageManager.updateUserImage(
+                    currentUser.uid,
+                    FirebaseImageManager.imageUri.value,
+                    navHeaderBinding.navHeaderImage, false
+                )
+            }
+        }
+        navHeaderBinding.navHeaderEmail.text = currentUser.email
+        if(currentUser.displayName != null)
+            navHeaderBinding.navHeaderName.text = currentUser.displayName
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -90,25 +166,22 @@ class Home : AppCompatActivity() {
         startActivity(intent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            imgRequest -> {
-                if (data != null) {
-                    artImage.setImageBitmap(readImage(this,resultCode,data))
-                    //Change text from add image to change image, as image has been added
-                    chooseImage.setText(R.string.change_image)
+    private fun registerImagePickerCallback() {
+        intentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                when(result.resultCode){
+                    RESULT_OK -> {
+                        if (result.data != null) {
+                            Timber.i("registerPickerCallback() ${readImageUri(result.resultCode, result.data).toString()}")
+                            FirebaseImageManager
+                                .updateUserImage(loggedInViewModel.liveFirebaseUser.value!!.uid,
+                                    readImageUri(result.resultCode, result.data),
+                                    navHeaderBinding.navHeaderImage,
+                                    true)
+                        } // end of if
+                    }
+                    RESULT_CANCELED -> { } else -> { }
                 }
             }
-            locationRequest -> {
-                if (data != null) {
-                    //parse location of art and make that the location with appropriate zoom
-                    val location = data.extras?.getParcelable<Location>("location")!!
-                    //art.lat = location.lat
-                    //art.lng = location.lng
-                    //art.zoom = location.zoom
-                }
-            }
-        }
     }
 }

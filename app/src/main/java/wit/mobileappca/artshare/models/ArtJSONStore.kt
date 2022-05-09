@@ -57,7 +57,7 @@ class ArtJSONStore : ArtStore, AnkoLogger {
     }
 
     //override fun create(art: ArtModel) {
-    //    art.id = generateRandomId().toString()
+    //    art.uid = generateRandomId().toString()
     //    arts.add(art)
     //    serialize()
     //}
@@ -77,7 +77,7 @@ class ArtJSONStore : ArtStore, AnkoLogger {
     /*
     override fun update(email: String, art: ArtModel) {
         val artsList = findAll() as ArrayList<ArtModel>
-        var foundArt: ArtModel? = artsList.find { m -> m.id == art.id }
+        var foundArt: ArtModel? = artsList.find { m -> m.uid == art.uid }
         if (foundArt != null) {
             foundArt.title = art.title
             foundArt.image = art.image

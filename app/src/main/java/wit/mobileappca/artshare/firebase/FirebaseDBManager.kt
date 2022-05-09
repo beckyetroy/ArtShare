@@ -12,7 +12,25 @@ object FirebaseDBManager : ArtStore {
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
     override fun findAll(artsList: MutableLiveData<List<ArtModel>>) {
-        TODO("Not yet implemented")
+        database.child("arts")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase Art error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val localList = ArrayList<ArtModel>()
+                    val children = snapshot.children
+                    children.forEach {
+                        val art = it.getValue(ArtModel::class.java)
+                        localList.add(art!!)
+                    }
+                    database.child("arts")
+                        .removeEventListener(this)
+
+                    artsList.value = localList
+                }
+            })
     }
 
     override fun findAll(userid: String, artsList: MutableLiveData<List<ArtModel>>) {
@@ -56,7 +74,7 @@ object FirebaseDBManager : ArtStore {
             Timber.i("Firebase Error : Key Empty")
             return
         }
-        art.id = key
+        art.uid = key
         val artValues = art.toMap()
 
         val childAdd = HashMap<String, Any>()
@@ -86,5 +104,47 @@ object FirebaseDBManager : ArtStore {
         childUpdate["user-arts/$userid/$artid"] = artValues
 
         database.updateChildren(childUpdate)
+    }
+
+    fun updateProfilePicRef(userid: String,imageUri: String) {
+
+        val userArts = database.child("user-arts").child(userid)
+        val allArts = database.child("arts")
+
+        userArts.addListenerForSingleValueEvent(
+            object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {}
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach {
+                        //Update Users imageUri
+                        it.ref.child("profilepic").setValue(imageUri)
+                        //Update all arts that match 'it'
+                        val art = it.getValue(ArtModel::class.java)
+                        allArts.child(art!!.uid!!)
+                            .child("profilepic").setValue(imageUri)
+                    }
+                }
+            })
+    }
+
+    fun updateImageRef(userid: String, title: String,imageUri: String) {
+
+        val userArts = database.child("user-arts").child(userid).child(title)
+        val allArts = database.child("arts")
+
+        userArts.addListenerForSingleValueEvent(
+            object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {}
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach {
+                        //Update Users imageUri
+                        it.ref.child("image").setValue(imageUri)
+                        //Update all arts that match 'it'
+                        val art = it.getValue(ArtModel::class.java)
+                        userArts.child(art!!.title!!)
+                            .child("image").setValue(imageUri)
+                    }
+                }
+            })
     }
 }

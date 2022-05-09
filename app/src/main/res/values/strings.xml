@@ -3,12 +3,12 @@
     <string name="button_addArt">Add This Art</string>
     <string name="hint_artTitle">Artwork Title</string>
     <string name="hint_artDescription">Describe your piece here (optional)</string>
-    <string name="menu_createEdit">Tweak your collection</string>
+    <string name="menu_create">Add Artwork</string>
     <string name="menu_view">ArtShare</string>
     <string name="menu_addArt">Add</string>
     <string name="menu_cancelArt">Cancel</string>
     <string name="menu_deleteArt">Delete</string>
-    <string name="menu_sendArt">Send</string>
+    <string name="sendArt">Share</string>
     <string name="action_view">View my Art</string>
     <string name="action_create">Add Artwork</string>
     <string name="group_communicate">Communicate</string>
@@ -38,8 +38,10 @@
     <string name="artsNotFound">No Artwork Yet…\nUpload some now!</string>
     <string name="likes_title">Likes</string>
     <string name="likes">0</string>
-    <string name="button_editArt">Edit</string>
+    <string name="button_editArt">Update</string>
     <string name="button_deleteArt">Delete</string>
+    <string name="select_profile_image">Select Profile Image</string>
+    <string name="action_location">Location</string>
 
     <!-- Firebase Resources-->
 

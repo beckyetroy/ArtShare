@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/createFragment"
         android:name="wit.mobileappca.artshare.ui.create.CreateFragment"
-        android:label="@string/menu_createEdit"
+        android:label="@string/menu_create"
         tools:layout="@layout/fragment_create" >
         <action
             android:id="@+id/action_createFragment_to_listFragment"
@@ -28,9 +28,7 @@
             app:exitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_listFragment_to_artDetailFragment"
-            app:destination="@id/artDetailFragment"
-            app:enterAnim="@anim/nav_default_pop_enter_anim"
-            app:exitAnim="@anim/nav_default_pop_exit_anim"/>
+            app:destination="@id/artDetailFragment"/>
     </fragment>
     <fragment
         android:id="@+id/artDetailFragment"
@@ -45,5 +43,14 @@
         <argument
             android:name="artid"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="wit.mobileappca.artshare.ui.map.MapsFragment"
+        android:label="Artwork Map"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_artDetailFragment"
+            app:destination="@id/artDetailFragment" />
     </fragment>
 </navigation>

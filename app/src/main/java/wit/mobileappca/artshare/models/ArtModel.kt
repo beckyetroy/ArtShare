@@ -9,33 +9,37 @@ import java.util.*
 @IgnoreExtraProperties
 @Parcelize
 data class ArtModel(
-    var id: String? = "",
+    var uid: String? = "",
     var title: String = "",
     var image: String = "",
     var type: String = "",
+    var typeIndex: Int = 0,
     var description: String = "",
     var date: Date = Calendar.getInstance().time,
     var lat: Double = 0.0,
     var lng: Double = 0.0,
     var zoom: Float = 0f,
     var likes: Int = 0,
-    var email: String? = "beckyet19@gmail.com") : Parcelable
+    var email: String? = "beckyet19@gmail.com",
+    var profilepic: String = "") : Parcelable
 
 {
     @Exclude
     fun toMap(): Map<String, Any?> {
         return mapOf(
-            "id" to id,
+            "uid" to uid,
             "title" to title,
             "image" to image,
             "type" to type,
+            "typeIndex" to typeIndex,
             "description" to description,
             "date" to date,
             "lat" to lat,
             "lng" to lng,
             "zoom" to zoom,
             "likes" to likes,
-            "email" to email
+            "email" to email,
+            "profilepic" to profilepic
         )
     }
 }
