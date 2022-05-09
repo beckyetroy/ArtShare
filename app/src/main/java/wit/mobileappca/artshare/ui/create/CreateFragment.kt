@@ -178,25 +178,6 @@ class CreateFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item?.itemId) {
-            R.id.item_email -> {
-                val email = Intent(Intent.ACTION_SEND)
-                //form email containing artwork details
-                email.putExtra(Intent.EXTRA_EMAIL, arrayOf("")) // recipients - will leave blank for
-                // users to complete
-                email.putExtra(Intent.EXTRA_SUBJECT, "Check out this art I made!")
-                email.putExtra(Intent.EXTRA_TEXT, "Have a look at this artwork: ${art.title}"
-                        + if (art.description != null) {"\n ${art.description}"} else {} +
-                        "\n Art Type: ${art.type}" + if (art.date != null) {". Made on ${art.date}."}
-                else {"."})
-                email.putExtra(Intent.EXTRA_STREAM, Uri.parse(art.image))
-
-                //need this to prompts email client only
-                email.type = "message/rfc822"
-                //starts the activity by choosing an email client, then going to send the email
-                startActivity(Intent.createChooser(email, "Choose an Email client :"))
-            }
-        }
         return super.onOptionsItemSelected(item)
     }
 
