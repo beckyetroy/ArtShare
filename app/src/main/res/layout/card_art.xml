@@ -48,18 +48,6 @@
             android:layout_toEndOf="@+id/image"
             android:text="@{art.type}" />
 
-        <ImageView
-            android:id="@+id/imagefavourite"
-            android:layout_width="44dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="110dp"
-            android:layout_marginTop="145dp"
-            android:layout_marginEnd="28dp"
-            android:layout_toEndOf="@+id/title"
-            app:srcCompat="@drawable/ic_like" />
-
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
 </layout>
