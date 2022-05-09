@@ -28,7 +28,6 @@ import kotlinx.android.synthetic.main.fragment_create.*
 import org.jetbrains.anko.toast
 import timber.log.Timber
 import wit.mobileappca.artshare.R
-import wit.mobileappca.artshare.activities.GMapsActivity
 import wit.mobileappca.artshare.databinding.FragmentCreateBinding
 import wit.mobileappca.artshare.firebase.FirebaseImageManager
 import wit.mobileappca.artshare.helpers.readImageUri
@@ -39,6 +38,7 @@ import wit.mobileappca.artshare.models.Location
 import wit.mobileappca.artshare.ui.auth.LoggedInViewModel
 import wit.mobileappca.artshare.ui.list.ListFragment
 import wit.mobileappca.artshare.ui.list.ListViewModel
+import wit.mobileappca.artshare.ui.map.MapsViewModel
 import java.util.Calendar.getInstance
 
 
@@ -49,10 +49,10 @@ class CreateFragment : Fragment() {
     private lateinit var createViewModel: CreateViewModel
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private lateinit var intentLauncher : ActivityResultLauncher<Intent>
+    private val mapsViewModel: MapsViewModel by activityViewModels()
 
     var art = ArtModel()
     var edit = false
-    val locationRequest = 2
     var bm = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,26 +88,6 @@ class CreateFragment : Fragment() {
                 // Apply the adapter to the category
                 category.adapter = adapter
             }
-        }
-
-        fragBinding.artLocation.setOnClickListener {
-            /*set default location (Florence, Italy) which user can keep if they're
-            not interested in this feature*/
-            val location = Location(43.769562, 11.255814, -20f)
-            if (art.zoom != 0f) {
-                location.lat = art.lat
-                location.lng = art.lng
-                location.zoom = art.zoom
-            }
-            //start Google Maps API
-            val i = Intent(activity, GMapsActivity::class.java)
-            i.putExtra("location", location)
-            startActivityForResult(i, locationRequest)
-        }
-
-        fragBinding.infoBtn.setOnClickListener() {
-            //Display info button message as toast notification
-            activity?.applicationContext?.toast(R.string.location_info)
         }
 
         setButtonListener(fragBinding)
@@ -164,7 +144,9 @@ class CreateFragment : Fragment() {
                 //create the art piece
                 createViewModel.addArt(loggedInViewModel.liveFirebaseUser,
                     ArtModel(title = title, image = image, description = description,
-                    type = type, typeIndex = typeIndex, date = date, email = email))
+                    type = type, typeIndex = typeIndex, date = date, email = email,
+                        lat = mapsViewModel.currentLocation.value!!.latitude,
+                        lng = mapsViewModel.currentLocation.value!!.longitude))
                 Toast.makeText(context, R.string.save_success,Toast.LENGTH_LONG).show()
             }
         }
@@ -192,9 +174,6 @@ class CreateFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_create, menu)
-        //if the art is in edit mode, display the menu with delete and email buttons
-        if (edit && menu != null) menu.getItem(0).isVisible = true
-        if (edit && menu != null) menu.getItem(1).isVisible = true
         super.onCreateOptionsMenu(menu, inflater)
     }
 

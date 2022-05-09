@@ -44,4 +44,13 @@
             android:name="artid"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="wit.mobileappca.artshare.ui.map.MapsFragment"
+        android:label="Artwork Map"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_artDetailFragment"
+            app:destination="@id/artDetailFragment" />
+    </fragment>
 </navigation>

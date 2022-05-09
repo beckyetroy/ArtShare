@@ -3,17 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:visible="false"
-        android:id="@+id/item_email"
-        android:icon="@android:drawable/ic_menu_send"
-        android:title="@string/menu_sendArt"
-        app:showAsAction="never"/>
-
-    <item
-        android:visible="false"
-        android:id="@+id/item_delete"
-        android:icon="@android:drawable/ic_menu_delete"
-        android:title="@string/menu_deleteArt"
-        app:showAsAction="never"/>
+        android:id="@+id/listFragment"
+        android:orderInCategory="100"
+        android:title="@string/action_view"
+        app:showAsAction="never" />
 
 </menu>

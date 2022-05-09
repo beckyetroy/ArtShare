@@ -12,6 +12,10 @@
             android:id="@+id/createFragment"
             android:icon="@drawable/ic_menu_create"
             android:title="@string/action_create" />
+        <item
+            android:id="@+id/mapsFragment"
+            android:icon="@drawable/ic_menu_location"
+            android:title="@string/action_location" />
     </group>
 
     <item android:title="@string/group_communicate">

@@ -79,6 +79,26 @@ class ArtDetailFragment : Fragment() {
             showImagePicker(intentLauncher)
         }
 
+        fragBinding.sendBtn.setOnClickListener {
+            val email = Intent(Intent.ACTION_SEND)
+            //form email containing artwork details
+            email.putExtra(Intent.EXTRA_EMAIL, arrayOf("")) // recipients - will leave blank for
+            // users to complete
+            email.putExtra(Intent.EXTRA_SUBJECT, "Check out this art I made!")
+            email.putExtra(Intent.EXTRA_TEXT, "Have a look at this artwork: " +
+                    "${fragBinding.artvm?.observableArt!!.value!!.title}"
+                    + if (fragBinding.artvm?.observableArt!!.value!!.description != null)
+                    {"\n ${fragBinding.artvm?.observableArt!!.value!!.description}"} else {} +
+                    "\n Art Type: ${fragBinding.artvm?.observableArt!!.value!!.type}.")
+            email.putExtra(Intent.EXTRA_STREAM,
+                Uri.parse(fragBinding.artvm?.observableArt!!.value!!.image))
+
+            //need this to prompts email client only
+            email.type = "message/rfc822"
+            //starts the activity by choosing an email client, then going to send the email
+            startActivity(Intent.createChooser(email, "Choose an Email client :"))
+        }
+
         fragBinding.btnEdit.setOnClickListener {
             detailViewModel.updateArt(loggedInViewModel.liveFirebaseUser.value?.uid!!,
                 args.artid, fragBinding.artvm?.observableArt!!.value!!)
